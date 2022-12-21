@@ -136,4 +136,8 @@ public class User {
     public void setInitialPoint() {
         this.points = INITIAL_POINT;
     }
+
+    public boolean authenticate(Password password, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(password.value(), this.password.value());
+    }
 }
