@@ -23,6 +23,14 @@ public class ImageUrl {
 
     @Override
     public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
         ImageUrl otherAbout = (ImageUrl) other;
 
         return Objects.equals(value, otherAbout.value);

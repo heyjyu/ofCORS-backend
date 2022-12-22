@@ -2,6 +2,7 @@ package kr.heyjyu.ofcors.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kr.heyjyu.ofcors.dtos.TagDto;
 
 import java.util.Objects;
 
@@ -23,6 +24,14 @@ public class Tag {
 
     @Override
     public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
         Tag otherTag = (Tag) other;
 
         return Objects.equals(value, otherTag.value);
@@ -31,5 +40,9 @@ public class Tag {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    public TagDto toDto() {
+        return new TagDto(value);
     }
 }

@@ -23,6 +23,14 @@ public class ScrapId {
 
     @Override
     public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
         ScrapId otherScrapId = (ScrapId) other;
 
         return Objects.equals(value, otherScrapId.value);

@@ -33,6 +33,14 @@ public class DisplayName {
 
     @Override
     public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
         DisplayName otherDisplayName = (DisplayName) other;
 
         return Objects.equals(value, otherDisplayName.value);

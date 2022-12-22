@@ -24,11 +24,25 @@ public class BackdoorController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @GetMapping("truncate")
+    public String truncate() {
+        jdbcTemplate.execute("DELETE FROM user_tags");
+        jdbcTemplate.execute("DELETE FROM user_scrap_ids");
+        jdbcTemplate.execute("DELETE FROM user_follower_ids");
+        jdbcTemplate.execute("DELETE FROM users");
+
+        jdbcTemplate.execute("DELETE FROM question_like_user_ids");
+        jdbcTemplate.execute("DELETE FROM question_tags");
+        jdbcTemplate.execute("DELETE FROM question");
+
+        return "OK";
+    }
+
     @GetMapping("setup-database")
     public String setupDatabase() {
         LocalDateTime now = LocalDateTime.now();
 
-        jdbcTemplate.execute("DELETE FROM users");
+        truncate();
 
         jdbcTemplate.update("" +
                         "INSERT INTO users(" +
@@ -48,6 +62,69 @@ public class BackdoorController {
                         " VALUES(2, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 "저는 함수형 프로그래밍을 좋아합니다", "joo2", "tester2@example.com", "", "홍동길", passwordEncoder.encode("Abcdef1!"), 100L,
                 now, now
+        );
+
+        return "OK";
+    }
+
+    @GetMapping("write-questions")
+    public String writeQuestions() {
+        LocalDateTime now = LocalDateTime.now();
+
+        jdbcTemplate.execute("DELETE FROM question_like_user_ids");
+        jdbcTemplate.execute("DELETE FROM question_tags");
+        jdbcTemplate.execute("DELETE FROM question");
+
+        jdbcTemplate.update("" +
+                        "INSERT INTO question(" +
+                        "  id, author_id, body, hits, points, question_status," +
+                        "  title, created_at, updated_at" +
+                        ")" +
+                        " VALUES(1, ?, ?, ?, ?, ?, ?, ?, ?)",
+                1L, "서버 배포 후 CORS에러가 발생합니다.", 3L, 30L, "open", "No 'Access-Control-Allow-Origin' 에러가 뜹니다",
+                now, now
+        );
+
+        jdbcTemplate.update("" +
+                        "INSERT INTO question_like_user_ids(" +
+                        "  question_id, like_user_id" +
+                        ")" +
+                        " VALUES(?, ?)",
+                1L, 2L
+        );
+
+        jdbcTemplate.update("" +
+                        "INSERT INTO question_like_user_ids(" +
+                        "  question_id, like_user_id" +
+                        ")" +
+                        " VALUES(?, ?)",
+                1L, 3L
+        );
+
+        jdbcTemplate.update("" +
+                        "INSERT INTO question(" +
+                        "  id, author_id, body, hits, points, question_status," +
+                        "  title, created_at, updated_at" +
+                        ")" +
+                        " VALUES(2, ?, ?, ?, ?, ?, ?, ?, ?)",
+                1L, "서버 배포 후 CORS에러가 발생합니다.", 3L, 30L, "open", "No 'Access-Control-Allow-Origin' 에러가 뜹니다",
+                now, now
+        );
+
+        jdbcTemplate.update("" +
+                        "INSERT INTO question_like_user_ids(" +
+                        "  question_id, like_user_id" +
+                        ")" +
+                        " VALUES(?, ?)",
+                2L, 1L
+        );
+
+        jdbcTemplate.update("" +
+                        "INSERT INTO question_tags(" +
+                        "  question_id, tag" +
+                        ")" +
+                        " VALUES(?, ?)",
+                2L, "Web"
         );
 
         return "OK";
