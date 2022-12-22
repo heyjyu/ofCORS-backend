@@ -6,14 +6,14 @@ import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class Points {
-    @Column(name = "points")
+public class AuthorId {
+    @Column(name = "authorId")
     private Long value;
 
-    public Points() {
+    public AuthorId() {
     }
 
-    public Points(Long value) {
+    public AuthorId(Long value) {
         this.value = value;
     }
 
@@ -31,9 +31,9 @@ public class Points {
             return false;
         }
 
-        Points otherPoints = (Points) other;
+        AuthorId otherAuthorId = (AuthorId) other;
 
-        return Objects.equals(value, otherPoints.value);
+        return Objects.equals(value, otherAuthorId.value);
     }
 
     @Override

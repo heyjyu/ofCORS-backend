@@ -33,6 +33,14 @@ public class Email {
 
     @Override
     public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
         Email otherEmail = (Email) other;
 
         return Objects.equals(value, otherEmail.value);

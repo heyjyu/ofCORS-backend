@@ -2,18 +2,19 @@ package kr.heyjyu.ofcors.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kr.heyjyu.ofcors.dtos.LikeUserIdDto;
 
 import java.util.Objects;
 
 @Embeddable
-public class Points {
-    @Column(name = "points")
+public class LikeUserId {
+    @Column(name = "likeUserId")
     private Long value;
 
-    public Points() {
+    public LikeUserId() {
     }
 
-    public Points(Long value) {
+    public LikeUserId(Long value) {
         this.value = value;
     }
 
@@ -31,13 +32,17 @@ public class Points {
             return false;
         }
 
-        Points otherPoints = (Points) other;
+        LikeUserId otherLikeUserId = (LikeUserId) other;
 
-        return Objects.equals(value, otherPoints.value);
+        return Objects.equals(value, otherLikeUserId.value);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    public LikeUserIdDto toDto() {
+        return new LikeUserIdDto(value);
     }
 }
