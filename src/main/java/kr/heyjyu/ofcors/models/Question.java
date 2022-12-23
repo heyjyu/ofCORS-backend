@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,9 @@ public class Question {
 
     @ElementCollection
     private Set<LikeUserId> likeUserIds = new HashSet<>();
+
+    @Formula("(SELECT COUNT(*) FROM question_like_user_ids l WHERE l.question_id = id)")
+    private int countOfLikes;
 
     @Embedded
     private Hits hits;
@@ -87,6 +91,10 @@ public class Question {
 
     public Set<LikeUserId> getLikeUserIds() {
         return likeUserIds;
+    }
+
+    public int getCountOfLikes() {
+        return countOfLikes;
     }
 
     public Hits getHits() {

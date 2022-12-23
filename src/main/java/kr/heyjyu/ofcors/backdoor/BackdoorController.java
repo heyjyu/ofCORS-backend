@@ -82,7 +82,7 @@ public class BackdoorController {
                         ")" +
                         " VALUES(1, ?, ?, ?, ?, ?, ?, ?, ?)",
                 1L, "서버 배포 후 CORS에러가 발생합니다.", 3L, 30L, "open", "No 'Access-Control-Allow-Origin' 에러가 뜹니다",
-                now, now
+                now.minusWeeks(2), now.minusWeeks(2)
         );
 
         jdbcTemplate.update("" +
