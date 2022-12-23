@@ -22,7 +22,7 @@ public class GetQuestionsService {
         this.questionRepository = questionRepository;
     }
 
-    public Page<Question> getQuestions(String sort, String period, String status, Integer size) {
+    public Page<Question> getQuestions(String sort, String period, String status, String keyword, Integer size) {
         // TODO: get page from request
         Integer page = 1;
 
@@ -36,8 +36,12 @@ public class GetQuestionsService {
 
         Specification<Question> specification = Specification.where(QuestionSpecification.equalStatus(new QuestionStatus(status)));
 
-        if (period != null) {
+        if (!period.equals("")) {
             specification = specification.and(QuestionSpecification.inPeriod(period));
+        }
+
+        if (!keyword.equals("")) {
+            specification = specification.and(QuestionSpecification.likeTitleOrBody(keyword));
         }
 
         return questionRepository.findAll(specification, pageable);
