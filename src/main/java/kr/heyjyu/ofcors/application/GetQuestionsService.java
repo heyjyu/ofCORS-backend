@@ -32,6 +32,10 @@ public class GetQuestionsService {
             sortBy = Sort.by("countOfLikes").descending();
         }
 
+        if (sort.equals("points")) {
+            sortBy = Sort.by("points").descending();
+        }
+
         Pageable pageable = PageRequest.of(page - 1, size, sortBy);
 
         Specification<Question> specification = Specification.where(QuestionSpecification.equalStatus(new QuestionStatus(status)));
