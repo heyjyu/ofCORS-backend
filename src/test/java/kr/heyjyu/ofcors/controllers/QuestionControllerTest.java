@@ -54,4 +54,17 @@ class QuestionControllerTest {
                         containsString("\"questions\":[")
                 ));
     }
+
+    @Test
+    void list() throws Exception {
+        Question question = mock(Question.class);
+        given(getQuestionsService.getQuestions(any(), any(), any(), any(), any()))
+                .willReturn(new PageImpl<>(List.of(question)));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/questions?sort=points&status=open&size=30"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"questions\":[")
+                ));
+    }
 }
