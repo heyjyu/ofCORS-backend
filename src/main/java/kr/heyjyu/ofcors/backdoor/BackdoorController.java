@@ -127,6 +127,16 @@ public class BackdoorController {
                 2L, "Web"
         );
 
+        jdbcTemplate.update("" +
+                        "INSERT INTO question(" +
+                        "  id, author_id, body, hits, points, question_status," +
+                        "  title, created_at, updated_at" +
+                        ")" +
+                        " VALUES(3, ?, ?, ?, ?, ?, ?, ?, ?)",
+                1L, "서버 배포 후 CORS에러가 발생합니다.", 3L, 30L, "closed", "No 'Access-Control-Allow-Origin' 에러가 뜹니다",
+                now.minusWeeks(2), now.minusWeeks(2)
+        );
+
         return "OK";
     }
 }

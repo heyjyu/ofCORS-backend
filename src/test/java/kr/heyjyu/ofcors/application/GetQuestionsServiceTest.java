@@ -35,9 +35,27 @@ class GetQuestionsServiceTest {
         String sort = "like";
         String period = "week";
         String status = "open";
+        String keyword = "";
         Integer count = 30;
 
-        assertThat(getQuestionsService.getQuestions(sort, period, status, count))
+        assertThat(getQuestionsService.getQuestions(sort, period, status, keyword, count))
+                .hasSize(1);
+    }
+
+    @Test
+    void getSearchResult() {
+        Question question = mock(Question.class);
+
+        given(questionRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .willReturn(new PageImpl<>(List.of(question)));
+
+        String sort = "like";
+        String period = "";
+        String status = "closed";
+        String keyword = "CORS";
+        Integer count = 30;
+
+        assertThat(getQuestionsService.getQuestions(sort, period, status, keyword, count))
                 .hasSize(1);
     }
 }

@@ -20,11 +20,12 @@ public class QuestionController {
     }
 
     @GetMapping
-    public QuestionsDto questions(@RequestParam String sort,
-                                  @RequestParam String period,
-                                  @RequestParam String status,
-                                  @RequestParam Integer size) {
-        return new QuestionsDto(getQuestionsService.getQuestions(sort, period, status, size).stream()
+    public QuestionsDto questions(@RequestParam(required = false, defaultValue = "") String sort,
+                                  @RequestParam(required = false, defaultValue = "") String period,
+                                  @RequestParam(required = false, defaultValue = "") String status,
+                                  @RequestParam(required = false, defaultValue = "") String keyword,
+                                  @RequestParam(required = false, defaultValue = "20") Integer size) {
+        return new QuestionsDto(getQuestionsService.getQuestions(sort, period, status, keyword, size).stream()
                 .map(Question::toDto)
                 .collect(Collectors.toList()));
     }

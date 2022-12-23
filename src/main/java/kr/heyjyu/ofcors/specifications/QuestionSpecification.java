@@ -9,7 +9,6 @@ import kr.heyjyu.ofcors.models.QuestionStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 
 public class QuestionSpecification {
     public static Specification<Question> inPeriod(String period) {
@@ -39,6 +38,17 @@ public class QuestionSpecification {
             @Override
             public Predicate toPredicate(Root<Question> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 return criteriaBuilder.equal(root.get("status"), status);
+            }
+        };
+    }
+
+    public static Specification<Question> likeTitleOrBody(String keyword) {
+        return new Specification<Question>() {
+            @Override
+            public Predicate toPredicate(Root<Question> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.or(
+                        criteriaBuilder.like(criteriaBuilder.upper(root.get("body").get("value")), "%" + keyword.toUpperCase() + "%"),
+                        criteriaBuilder.like(criteriaBuilder.upper(root.get("title").get("value")), "%" + keyword.toUpperCase() + "%"));
             }
         };
     }

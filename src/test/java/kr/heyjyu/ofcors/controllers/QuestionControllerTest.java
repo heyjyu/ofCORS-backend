@@ -32,10 +32,23 @@ class QuestionControllerTest {
     @Test
     void topQuestions() throws Exception {
         Question question = mock(Question.class);
-        given(getQuestionsService.getQuestions(any(), any(), any(), any()))
+        given(getQuestionsService.getQuestions(any(), any(), any(), any(), any()))
                 .willReturn(new PageImpl<>(List.of(question)));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/questions?sort=like&status=open&period=week&size=30"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"questions\":[")
+                ));
+    }
+
+    @Test
+    void search() throws Exception {
+        Question question = mock(Question.class);
+        given(getQuestionsService.getQuestions(any(), any(), any(), any(), any()))
+                .willReturn(new PageImpl<>(List.of(question)));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/questions?sort=like&status=closed&keyword=CORS&size=30"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"questions\":[")
