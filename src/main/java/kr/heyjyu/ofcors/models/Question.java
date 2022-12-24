@@ -3,6 +3,8 @@ package kr.heyjyu.ofcors.models;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
@@ -24,7 +26,7 @@ public class Question {
     @Embedded
     private AuthorId authorId;
 
-    @Embedded
+    @Enumerated(EnumType.STRING)
     private QuestionStatus status;
 
     @Embedded
