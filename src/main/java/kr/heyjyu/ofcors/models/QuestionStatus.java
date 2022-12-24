@@ -3,54 +3,33 @@ package kr.heyjyu.ofcors.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
-import java.util.Objects;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@Embeddable
-public class QuestionStatus {
-    private static final QuestionStatus OPEN =
-            new QuestionStatus("open");
-    private static final QuestionStatus CLOSED =
-            new QuestionStatus("closed");
+public enum QuestionStatus {
+    OPEN("open"),
+    CLOSED("closed");
 
-    @Column(name = "questionStatus")
+    private static final Map<String, String> STATUS_MAP = Collections.unmodifiableMap(
+            Stream.of(values()).collect(Collectors.toMap(QuestionStatus::value, QuestionStatus::name))
+    );
+
     private String value;
 
-    public QuestionStatus() {
+    QuestionStatus() {
     }
 
-    public QuestionStatus(String value) {
+    QuestionStatus(String value) {
         this.value = value;
-    }
-
-    public static QuestionStatus open() {
-        return OPEN;
-    }
-
-    public static QuestionStatus closed() {
-        return CLOSED;
     }
 
     public String value() {
         return value;
     }
 
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (other == null || getClass() != other.getClass()) {
-            return false;
-        }
-
-        QuestionStatus otherQuestionStatus = (QuestionStatus) other;
-
-        return Objects.equals(value, otherQuestionStatus.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value);
+    public static QuestionStatus of(final String value) {
+        return QuestionStatus.valueOf(STATUS_MAP.get(value));
     }
 }

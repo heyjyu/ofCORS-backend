@@ -38,7 +38,7 @@ public class GetQuestionsService {
 
         Pageable pageable = PageRequest.of(page - 1, size, sortBy);
 
-        Specification<Question> specification = Specification.where(QuestionSpecification.equalStatus(new QuestionStatus(status)));
+        Specification<Question> specification = Specification.where(QuestionSpecification.equalStatus(QuestionStatus.of(status)));
 
         if (!period.equals("")) {
             specification = specification.and(QuestionSpecification.inPeriod(period));
