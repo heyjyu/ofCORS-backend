@@ -1,6 +1,7 @@
 package kr.heyjyu.ofcors.dtos;
 
 public class UserDto {
+    private Long id;
     private String displayName;
     private String about;
     private Long points;
@@ -10,12 +11,17 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(String displayName, String about, Long points, String realName, String imageUrl) {
+    public UserDto(Long id, String displayName, String about, Long points, String realName, String imageUrl) {
+        this.id = id;
         this.displayName = displayName;
         this.about = about;
         this.points = points;
         this.realName = realName;
         this.imageUrl = imageUrl;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getDisplayName() {
