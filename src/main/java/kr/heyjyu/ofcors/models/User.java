@@ -143,7 +143,8 @@ public class User {
     }
 
     public UserDto toDto() {
-        return new UserDto(this.displayName.value(),
+        return new UserDto(this.id,
+                this.displayName.value(),
                 this.about.value(),
                 this.points.value(),
                 this.name.value(),

@@ -1,10 +1,12 @@
 package kr.heyjyu.ofcors.dtos;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 public class QuestionDto {
     private Long id;
+    private AuthorDto author;
     private String status;
     private String title;
     private String body;
@@ -16,6 +18,7 @@ public class QuestionDto {
     private LocalDateTime updatedAt;
 
     public QuestionDto(Long id,
+                       AuthorDto author,
                        String status,
                        String title,
                        String body,
@@ -26,6 +29,7 @@ public class QuestionDto {
                        LocalDateTime createdAt,
                        LocalDateTime updatedAt) {
         this.id = id;
+        this.author = author;
         this.status = status;
         this.title = title;
         this.body = body;
@@ -39,6 +43,10 @@ public class QuestionDto {
 
     public Long getId() {
         return id;
+    }
+
+    public AuthorDto getAuthor() {
+        return author;
     }
 
     public String getStatus() {
@@ -75,5 +83,21 @@ public class QuestionDto {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public static QuestionDto fake() {
+        return new QuestionDto(
+                1L,
+                new AuthorDto(1L, "joo"),
+                "OPEN",
+                "CORS에러가 발생합니다",
+                "서버 배포 후 CORS에러가 발생합니다",
+                Set.of(new TagDto("Web")),
+                30L,
+                Set.of(new LikeUserIdDto(2L)),
+                2L,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
     }
 }

@@ -122,19 +122,6 @@ public class Question {
         return updatedAt;
     }
 
-    public QuestionDto toDto() {
-        return new QuestionDto(id,
-                status.value(),
-                title.value(),
-                body.value(),
-                tags.stream().map(Tag::toDto).collect(Collectors.toSet()),
-                points.value(),
-                likeUserIds.stream().map(LikeUserId::toDto).collect(Collectors.toSet()),
-                hits.value(),
-                createdAt,
-                updatedAt);
-    }
-
     public QuestionCreationDto toCreationDto() {
         return new QuestionCreationDto(id);
     }
