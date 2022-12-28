@@ -2,13 +2,17 @@ package kr.heyjyu.ofcors.controllers;
 
 import kr.heyjyu.ofcors.application.CountUserService;
 import kr.heyjyu.ofcors.application.CreateUserService;
+import kr.heyjyu.ofcors.application.GetUserService;
 import kr.heyjyu.ofcors.exceptions.ExistingEmail;
 import kr.heyjyu.ofcors.models.Email;
 import kr.heyjyu.ofcors.models.User;
+import kr.heyjyu.ofcors.utils.JwtUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,10 +31,23 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
+    private GetUserService getUserService;
+
+    @MockBean
     private CreateUserService createUserService;
 
     @MockBean
     private CountUserService countUserService;
+
+    @SpyBean
+    private JwtUtil jwtUtil;
+
+    private String token;
+
+    @BeforeEach
+    void setup() {
+        token = jwtUtil.encode(1L);
+    }
 
     @Test
     void userCountWithExistingEmail() throws Exception {
@@ -42,6 +59,29 @@ class UserControllerTest {
                 .andExpect(content().string(
                         containsString("\"count\":1")
                 ));
+    }
+
+    @Test
+    void user() throws Exception {
+        given(getUserService.getUser(any()))
+                .willReturn(User.fake());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/me")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"points\"")
+                ));
+    }
+
+    @Test
+    void userWithWrongToken() throws Exception {
+        given(getUserService.getUser(any()))
+                .willReturn(User.fake());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/me")
+                        .header("Authorization", "Bearer WRONG.TOKEN"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

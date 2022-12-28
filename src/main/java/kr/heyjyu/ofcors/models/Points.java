@@ -2,6 +2,8 @@ package kr.heyjyu.ofcors.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kr.heyjyu.ofcors.exceptions.NotEnoughPoints;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Objects;
 
@@ -39,5 +41,13 @@ public class Points {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    public Points deduct(Points points) {
+        if (this.value < points.value) {
+            throw new NotEnoughPoints();
+        }
+
+        return new Points(this.value - points.value);
     }
 }

@@ -1,11 +1,15 @@
 package kr.heyjyu.ofcors.models;
 
+import kr.heyjyu.ofcors.exceptions.NotEnoughPoints;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserTest {
     @Test
@@ -39,5 +43,34 @@ class UserTest {
 
         assertThat(user.authenticate(new Password("Abcdef1!"), passwordEncoder)).isTrue();
         assertThat(user.authenticate(new Password("Abcdef1!!"), passwordEncoder)).isFalse();
+    }
+
+    @Test
+    void ask() {
+        User user = new User();
+        user.setInitialPoint();
+
+        Question question = Question.fake();
+
+        user.ask(question);
+
+        assertThat(user.getPoints())
+                .isEqualTo(new Points(User.INITIAL_POINT.value() - question.getPoints().value()));
+    }
+
+    @Test
+    void askWithNotEnoughPoints() {
+        User user = new User();
+        user.setInitialPoint();
+
+        AuthorId authorId = new AuthorId(1L);
+        Title title = new Title("CORS에러가 발생합니다.");
+        Body body = new Body("서버 배포 후 CORS에러가 발생합니다.");
+        Set<Tag> tags = Set.of(new Tag("Web"));
+        Points points = new Points(10000L);
+
+        Question question = new Question(authorId, title, body, tags, points);
+
+        assertThrows(NotEnoughPoints.class, () -> user.ask(question));
     }
 }

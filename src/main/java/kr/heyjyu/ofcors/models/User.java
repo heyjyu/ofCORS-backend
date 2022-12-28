@@ -7,6 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kr.heyjyu.ofcors.dtos.UserCreationDto;
+import kr.heyjyu.ofcors.dtos.UserDto;
+import kr.heyjyu.ofcors.exceptions.NotEnoughPoints;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.parameters.P;
@@ -67,14 +69,21 @@ public class User {
     public User(DisplayName displayName, Email email) {
         this.displayName = displayName;
         this.email = email;
+        this.about = new About("");
+        this.imageUrl = new ImageUrl("https://ui-avatars.com/api/?name=" + displayName);
+        this.name = new Name("");
     }
 
     public void changePassword(Password password, PasswordEncoder passwordEncoder) {
         this.password = new Password(password, passwordEncoder);
     }
 
-    public static User fake() {
-        return new User(new DisplayName("joo"), new Email("test@example.com"));
+    public void setInitialPoint() {
+        this.points = INITIAL_POINT;
+    }
+
+    public void ask(Question question) {
+        this.points = this.points.deduct(question.getPoints());
     }
 
     public Long getId() {
@@ -129,15 +138,27 @@ public class User {
         return updatedAt;
     }
 
+    public boolean authenticate(Password password, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(password.value(), this.password.value());
+    }
+
+    public UserDto toDto() {
+        return new UserDto(this.displayName.value(),
+                this.about.value(),
+                this.points.value(),
+                this.name.value(),
+                this.imageUrl.value());
+    }
+
     public UserCreationDto toCreationDto() {
         return new UserCreationDto(id, displayName.value());
     }
 
-    public void setInitialPoint() {
-        this.points = INITIAL_POINT;
-    }
+    public static User fake() {
+        User user = new User(new DisplayName("joo"), new Email("test@example.com"));
 
-    public boolean authenticate(Password password, PasswordEncoder passwordEncoder) {
-        return passwordEncoder.matches(password.value(), this.password.value());
+        user.setInitialPoint();
+
+        return user;
     }
 }

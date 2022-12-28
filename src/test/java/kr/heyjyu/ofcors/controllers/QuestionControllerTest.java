@@ -1,12 +1,17 @@
 package kr.heyjyu.ofcors.controllers;
 
+import kr.heyjyu.ofcors.application.CreateQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionsService;
 import kr.heyjyu.ofcors.models.Question;
+import kr.heyjyu.ofcors.utils.JwtUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,6 +33,19 @@ class QuestionControllerTest {
 
     @MockBean
     private GetQuestionsService getQuestionsService;
+
+    @MockBean
+    private CreateQuestionService createQuestionService;
+
+    @SpyBean
+    private JwtUtil jwtUtil;
+
+    private String token;
+
+    @BeforeEach
+    void setup() {
+        token = jwtUtil.encode(1L);
+    }
 
     @Test
     void topQuestions() throws Exception {
@@ -66,5 +84,31 @@ class QuestionControllerTest {
                 .andExpect(content().string(
                         containsString("\"questions\":[")
                 ));
+    }
+
+    @Test
+    void create() throws Exception {
+        given(createQuestionService.create(any(), any(), any(), any(), any()))
+                .willReturn(Question.fake());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/questions")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"title\":\"No 'Access-Control-Allow-Origin' 에러가 발생합니다\"," +
+                                "\"body\":\"서버 배포 후 CORS 에러가 발생합니다.\"," +
+                                "\"tags\":[\"Web\"]," +
+                                "\"points\":\"30\"" +
+                                "}"))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/questions")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"title\":\"No 'Access-Control-Allow-Origin' 에러가 발생합니다\"," +
+                                "\"body\":\"서버 배포 후 CORS 에러가 발생합니다.\"" +
+                                "}"))
+                .andExpect(status().isCreated());
     }
 }
