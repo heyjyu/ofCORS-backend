@@ -49,7 +49,6 @@ class CreateQuestionServiceTest {
 
         Question question = createQuestionService.create(userId, title, body, tags, points);
 
-        System.out.println(question);
         assertThat(question).isNotNull();
         assertThat(user.getPoints()).isEqualTo(new Points(initialPoints.value() - points.value()));
         verify(questionRepository).save(any(Question.class));
