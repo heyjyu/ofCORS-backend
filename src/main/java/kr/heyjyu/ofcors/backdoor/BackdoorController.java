@@ -35,6 +35,9 @@ public class BackdoorController {
         jdbcTemplate.execute("DELETE FROM question_tags");
         jdbcTemplate.execute("DELETE FROM question");
 
+        jdbcTemplate.execute("DELETE FROM answer_like_user_ids");
+        jdbcTemplate.execute("DELETE FROM answer");
+
         return "OK";
     }
 
@@ -50,7 +53,7 @@ public class BackdoorController {
                         "  encoded_password, points, created_at, updated_at" +
                         ")" +
                         " VALUES(1, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                "저는 함수형 프로그래밍을 좋아합니다", "joo", "tester@example.com", "", "홍길동", passwordEncoder.encode("Abcdef1!"), 100L,
+                "저는 함수형 프로그래밍을 좋아합니다", "joo", "tester@example.com", "https://ui-avatars.com/api/?name=joo&background=0D8ABC&color=fff", "홍길동", passwordEncoder.encode("Abcdef1!"), 100L,
                 now, now
         );
 
@@ -60,7 +63,7 @@ public class BackdoorController {
                         "  encoded_password, points, created_at, updated_at" +
                         ")" +
                         " VALUES(2, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                "저는 함수형 프로그래밍을 좋아합니다", "joo2", "tester2@example.com", "", "홍동길", passwordEncoder.encode("Abcdef1!"), 100L,
+                "저는 함수형 프로그래밍을 좋아합니다", "joo2", "tester2@example.com", "https://ui-avatars.com/api/?name=joo2&background=0D8ABC&color=fff", "홍동길", passwordEncoder.encode("Abcdef1!"), 100L,
                 now, now
         );
 

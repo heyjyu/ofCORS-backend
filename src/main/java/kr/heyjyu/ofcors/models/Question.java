@@ -1,5 +1,7 @@
 package kr.heyjyu.ofcors.models;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -8,7 +10,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import kr.heyjyu.ofcors.dtos.QuestionCreationDto;
-import kr.heyjyu.ofcors.dtos.QuestionDto;
+import kr.heyjyu.ofcors.exceptions.AlreadyAdopted;
+import kr.heyjyu.ofcors.exceptions.InvalidUser;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,7 +19,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 public class Question {
@@ -47,6 +49,10 @@ public class Question {
 
     @Formula("(SELECT COUNT(*) FROM question_like_user_ids l WHERE l.question_id = id)")
     private int countOfLikes;
+
+    @Embedded
+    @AttributeOverride(name="value", column = @Column(name = "SELECTED_ANSWER_ID"))
+    private AnswerId selectedAnswerId;
 
     @Embedded
     private Hits hits;
@@ -110,6 +116,10 @@ public class Question {
         return countOfLikes;
     }
 
+    public AnswerId getSelectedAnswerId() {
+        return selectedAnswerId;
+    }
+
     public Hits getHits() {
         return hits;
     }
@@ -134,5 +144,18 @@ public class Question {
         Points points = new Points(30L);
 
         return new Question(authorId, title, body, tags, points);
+    }
+
+    public void adopt(Long userId, AnswerId answerId) {
+        if (this.authorId.value() != userId) {
+            throw new InvalidUser();
+        }
+
+        if (this.status == QuestionStatus.CLOSED || this.selectedAnswerId != null){
+            throw new AlreadyAdopted();
+        }
+
+        this.status = QuestionStatus.CLOSED;
+        this.selectedAnswerId = answerId;
     }
 }

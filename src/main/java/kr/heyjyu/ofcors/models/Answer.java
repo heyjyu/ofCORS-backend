@@ -10,7 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Answer {
@@ -21,10 +22,8 @@ public class Answer {
     @Embedded
     private QuestionId questionId;
 
-    private boolean selected;
-
     @ElementCollection
-    private List<LikeUserId> likeUserIds;
+    private Set<LikeUserId> likeUserIds;
 
     @Embedded
     private Body body;
@@ -43,9 +42,9 @@ public class Answer {
 
     public Answer(QuestionId questionId, Body body, AuthorId authorId) {
         this.questionId = questionId;
-        this.selected = false;
         this.body = body;
         this.authorId = authorId;
+        this.likeUserIds = new HashSet<>();
     }
 
     public static Answer fake() {
@@ -64,11 +63,7 @@ public class Answer {
         return questionId;
     }
 
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public List<LikeUserId> getLikeUserIds() {
+    public Set<LikeUserId> getLikeUserIds() {
         return likeUserIds;
     }
 
