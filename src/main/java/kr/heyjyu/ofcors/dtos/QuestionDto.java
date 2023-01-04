@@ -13,6 +13,7 @@ public class QuestionDto {
     private Set<TagDto> tags;
     private Long points;
     private Set<LikeUserIdDto> likeUserIds;
+    private Long selectedAnswerId;
     private Long hits;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -25,6 +26,7 @@ public class QuestionDto {
                        Set<TagDto> tags,
                        Long points,
                        Set<LikeUserIdDto> likeUserIds,
+                       Long selectedAnswerId,
                        Long hits,
                        LocalDateTime createdAt,
                        LocalDateTime updatedAt) {
@@ -36,6 +38,7 @@ public class QuestionDto {
         this.tags = tags;
         this.points = points;
         this.likeUserIds = likeUserIds;
+        this.selectedAnswerId = selectedAnswerId;
         this.hits = hits;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -73,6 +76,10 @@ public class QuestionDto {
         return likeUserIds;
     }
 
+    public Long getSelectedAnswerId() {
+        return selectedAnswerId;
+    }
+
     public Long getHits() {
         return hits;
     }
@@ -95,6 +102,7 @@ public class QuestionDto {
                 Set.of(new TagDto("Web")),
                 30L,
                 Set.of(new LikeUserIdDto(2L)),
+                1L,
                 2L,
                 LocalDateTime.now(),
                 LocalDateTime.now()

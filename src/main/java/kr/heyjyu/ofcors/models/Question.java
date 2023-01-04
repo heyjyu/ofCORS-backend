@@ -77,6 +77,7 @@ public class Question {
         this.tags = tags;
         this.points = points;
         this.status = QuestionStatus.OPEN;
+        this.selectedAnswerId = new AnswerId(-1L);
         this.hits = new Hits(0L);
     }
 
@@ -151,7 +152,7 @@ public class Question {
             throw new InvalidUser();
         }
 
-        if (this.status == QuestionStatus.CLOSED || this.selectedAnswerId != null){
+        if (this.status == QuestionStatus.CLOSED || this.selectedAnswerId.value() > 0){
             throw new AlreadyAdopted();
         }
 
