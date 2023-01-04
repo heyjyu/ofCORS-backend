@@ -46,6 +46,7 @@ public class GetQuestionService {
                 question.getTags().stream().map(Tag::toDto).collect(Collectors.toSet()),
                 question.getPoints().value(),
                 question.getLikeUserIds().stream().map(LikeUserId::toDto).collect(Collectors.toSet()),
+                question.getSelectedAnswerId().value(),
                 question.getHits().value(),
                 question.getCreatedAt(),
                 question.getUpdatedAt()
