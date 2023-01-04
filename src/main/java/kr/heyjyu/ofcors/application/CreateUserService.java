@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import kr.heyjyu.ofcors.exceptions.ExistingEmail;
 import kr.heyjyu.ofcors.models.DisplayName;
 import kr.heyjyu.ofcors.models.Email;
+import kr.heyjyu.ofcors.models.ImageUrl;
 import kr.heyjyu.ofcors.models.Password;
 import kr.heyjyu.ofcors.models.User;
 import kr.heyjyu.ofcors.repositories.UserRepository;
@@ -26,8 +27,11 @@ public class CreateUserService {
             throw new ExistingEmail(email);
         }
 
+        ImageUrl imageUrl = new ImageUrl("https://ui-avatars.com/api/?name=" + displayName + "&background=0D8ABC&color=fff");
+
         User user = new User(displayName, email);
         user.changePassword(password, passwordEncoder);
+        user.changeImageUrl(imageUrl);
         user.setInitialPoint();
 
         userRepository.save(user);

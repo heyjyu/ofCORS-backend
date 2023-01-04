@@ -1,5 +1,6 @@
 package kr.heyjyu.ofcors.controllers;
 
+import kr.heyjyu.ofcors.application.AdoptAnswerService;
 import kr.heyjyu.ofcors.application.CreateQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionsService;
@@ -41,6 +42,9 @@ class QuestionControllerTest {
     @MockBean
     private GetQuestionService getQuestionService;
 
+    @MockBean
+    private AdoptAnswerService adoptAnswerService;
+
     @SpyBean
     private JwtUtil jwtUtil;
 
@@ -79,7 +83,6 @@ class QuestionControllerTest {
 
     @Test
     void list() throws Exception {
-        Question question = mock(Question.class);
         given(getQuestionsService.getQuestions(any(), any(), any(), any(), any()))
                 .willReturn(List.of(QuestionDto.fake()));
 
@@ -123,5 +126,26 @@ class QuestionControllerTest {
                                 "\"body\":\"서버 배포 후 CORS 에러가 발생합니다.\"" +
                                 "}"))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void adopt() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/questions/1")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"answerId\":1" +
+                        "}"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void adoptWithoutToken() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/questions/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"answerId\":1" +
+                                "}"))
+                .andExpect(status().isBadRequest());
     }
 }

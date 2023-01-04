@@ -11,7 +11,6 @@ import kr.heyjyu.ofcors.dtos.UserDto;
 import kr.heyjyu.ofcors.exceptions.NotEnoughPoints;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -142,6 +141,19 @@ public class User {
         return passwordEncoder.matches(password.value(), this.password.value());
     }
 
+    public void changeImageUrl(ImageUrl url) {
+        this.imageUrl = url;
+    }
+
+    public void transfer(User receiver, Points points) {
+        if (!this.points.isAffordable(points)) {
+            throw new NotEnoughPoints();
+        }
+
+        this.points = this.points.deduct(points);
+        receiver.points = receiver.points.add(points);
+    }
+
     public UserDto toDto() {
         return new UserDto(this.id,
                 this.displayName.value(),
@@ -161,5 +173,9 @@ public class User {
         user.setInitialPoint();
 
         return user;
+    }
+
+    public void receive(Points points) {
+        this.points = this.points.add(points);
     }
 }

@@ -16,4 +16,23 @@ class PointsTest {
 
         assertThrows(NotEnoughPoints.class, () -> points.deduct(new Points(100L)));
     }
+
+    @Test
+    void add() {
+        Points points = new Points(20L);
+
+        assertThat(points.add(new Points(10L)))
+                .isEqualTo(new Points(30L));
+    }
+
+    @Test
+    void isAffordable() {
+        Points points = new Points(20L);
+
+        assertThat(points.isAffordable(new Points(20L)))
+                .isTrue();
+
+        assertThat(points.isAffordable(new Points(100L)))
+                .isFalse();
+    }
 }

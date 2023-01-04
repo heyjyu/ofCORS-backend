@@ -37,7 +37,8 @@ public class GetQuestionService {
                 question.getId(),
                 new AuthorDto(
                         author.getId(),
-                        author.getDisplayName().value()
+                        author.getDisplayName().value(),
+                        author.getImageUrl().value()
                 ),
                 question.getStatus().value(),
                 question.getTitle().value(),

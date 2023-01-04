@@ -50,4 +50,12 @@ public class Points {
 
         return new Points(this.value - points.value);
     }
+
+    public Points add(Points points) {
+        return new Points(this.value + points.value);
+    }
+
+    public boolean isAffordable(Points points) {
+        return this.value >= points.value;
+    }
 }

@@ -88,7 +88,7 @@ public class QuestionDto {
     public static QuestionDto fake() {
         return new QuestionDto(
                 1L,
-                new AuthorDto(1L, "joo"),
+                new AuthorDto(1L, "joo", "https://ui-avatars.com/api/?name=Joo&background=0D8ABC&color=fff"),
                 "OPEN",
                 "CORS에러가 발생합니다",
                 "서버 배포 후 CORS에러가 발생합니다",

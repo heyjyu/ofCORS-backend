@@ -25,6 +25,17 @@ class UserTest {
     }
 
     @Test
+    void changeImageUrl() {
+        User user = User.fake();
+
+        ImageUrl imageUrl = new ImageUrl("https://ui-avatars.com/api/?name=Joo&background=0D8ABC&color=fff");
+
+        user.changeImageUrl(imageUrl);
+
+        assertThat(user.getImageUrl()).isEqualTo(imageUrl);
+    }
+
+    @Test
     void setInitialPoint() {
         User user = new User();
 
@@ -72,5 +83,35 @@ class UserTest {
         Question question = new Question(authorId, title, body, tags, points);
 
         assertThrows(NotEnoughPoints.class, () -> user.ask(question));
+    }
+
+    @Test
+    void transfer() {
+        User sender = User.fake();
+        User receiver = User.fake();
+        Points points = new Points(10L);
+
+        sender.transfer(receiver, points);
+
+        assertThat(sender.getPoints()).isEqualTo(User.INITIAL_POINT.deduct(points));
+        assertThat(receiver.getPoints()).isEqualTo(User.INITIAL_POINT.add(points));
+    }
+
+    @Test
+    void receive() {
+        User user = User.fake();
+        Points points = new Points(10L);
+
+        user.receive(points);
+        assertThat(user.getPoints()).isEqualTo(User.INITIAL_POINT.add(points));
+    }
+
+    @Test
+    void transferExcessiveAmount() {
+        User sender = User.fake();
+        User receiver = User.fake();
+        Points points = new Points(1000L);
+
+        assertThrows(NotEnoughPoints.class, () -> sender.transfer(receiver, points));
     }
 }
