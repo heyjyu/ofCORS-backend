@@ -5,6 +5,7 @@ import kr.heyjyu.ofcors.dtos.AuthorDto;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
 import kr.heyjyu.ofcors.exceptions.QuestionNotFound;
 import kr.heyjyu.ofcors.exceptions.UserNotFound;
+import kr.heyjyu.ofcors.models.AnswerId;
 import kr.heyjyu.ofcors.models.LikeUserId;
 import kr.heyjyu.ofcors.models.Question;
 import kr.heyjyu.ofcors.models.Tag;
@@ -13,6 +14,9 @@ import kr.heyjyu.ofcors.repositories.QuestionRepository;
 import kr.heyjyu.ofcors.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +37,11 @@ public class GetQuestionService {
         User author = userRepository.findById(question.getAuthorId().value())
                 .orElseThrow(() -> new UserNotFound(question.getAuthorId().value()));
 
+        Optional<AnswerId> selectedAnswerIdOptional = Optional.ofNullable(question.getSelectedAnswerId());
+        Long selectedAnswerId = selectedAnswerIdOptional.isPresent()
+                ? selectedAnswerIdOptional.get().value()
+                : null;
+
         return new QuestionDto(
                 question.getId(),
                 new AuthorDto(
@@ -46,7 +55,7 @@ public class GetQuestionService {
                 question.getTags().stream().map(Tag::toDto).collect(Collectors.toSet()),
                 question.getPoints().value(),
                 question.getLikeUserIds().stream().map(LikeUserId::toDto).collect(Collectors.toSet()),
-                question.getSelectedAnswerId().value(),
+                selectedAnswerId,
                 question.getHits().value(),
                 question.getCreatedAt(),
                 question.getUpdatedAt()

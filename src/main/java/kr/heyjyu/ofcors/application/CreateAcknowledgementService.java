@@ -44,7 +44,7 @@ public class CreateAcknowledgementService {
                 .orElseThrow(() -> new UserNotFound(question.getAuthorId().value()));
 
         Answer answer = answerRepository.findById(answerId.value())
-                .orElseThrow(() -> new AnswerNotFound(answerId.value()));
+                .orElseThrow(() -> new AnswerNotFound(answerId));
 
         User receiver = userRepository.findById(answer.getAuthorId().value())
                 .orElseThrow(() -> new UserNotFound(answer.getAuthorId().value()));
