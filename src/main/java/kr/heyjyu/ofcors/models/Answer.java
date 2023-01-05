@@ -86,4 +86,14 @@ public class Answer {
     public AnswerCreationDto toCreationDto() {
         return new AnswerCreationDto(id);
     }
+
+    public void toggleLike(LikeUserId likeUserId) {
+        if (likeUserIds.contains(likeUserId)) {
+            likeUserIds.remove(likeUserId);
+
+            return;
+        }
+
+        likeUserIds.add(likeUserId);
+    }
 }

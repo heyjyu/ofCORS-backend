@@ -159,4 +159,14 @@ public class Question {
         this.status = QuestionStatus.CLOSED;
         this.selectedAnswerId = answerId;
     }
+
+    public void toggleLike(LikeUserId likeUserId) {
+        if (likeUserIds.contains(likeUserId)) {
+            likeUserIds.remove(likeUserId);
+
+            return;
+        }
+
+        likeUserIds.add(likeUserId);
+    }
 }

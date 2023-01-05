@@ -45,4 +45,18 @@ class QuestionTest {
 
         assertThrows(InvalidUser.class, () -> question.adopt(userId, answerId));
     }
+
+    @Test
+    void toggleLike() {
+        Question question = Question.fake();
+        LikeUserId likeUserId = new LikeUserId(1L);
+
+        question.toggleLike(likeUserId);
+
+        assertThat(question.getLikeUserIds()).hasSize(1);
+
+        question.toggleLike(likeUserId);
+
+        assertThat(question.getLikeUserIds()).hasSize(0);
+    }
 }
