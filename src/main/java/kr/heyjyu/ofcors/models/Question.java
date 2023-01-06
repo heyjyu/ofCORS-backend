@@ -10,6 +10,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import kr.heyjyu.ofcors.dtos.QuestionCreationDto;
+import kr.heyjyu.ofcors.dtos.QuestionDto;
+import kr.heyjyu.ofcors.dtos.QuestionModificationDto;
+import kr.heyjyu.ofcors.dtos.TagDto;
 import kr.heyjyu.ofcors.exceptions.AlreadyAdopted;
 import kr.heyjyu.ofcors.exceptions.InvalidUser;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,7 +21,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Question {
@@ -133,20 +138,6 @@ public class Question {
         return updatedAt;
     }
 
-    public QuestionCreationDto toCreationDto() {
-        return new QuestionCreationDto(id);
-    }
-
-    public static Question fake() {
-        AuthorId authorId = new AuthorId(1L);
-        Title title = new Title("CORS 에러가 발생합니다");
-        Body body = new Body("서버 배포 후 CORS에러가 발생합니다.");
-        Set<Tag> tags = Set.of(new Tag("Web"));
-        Points points = new Points(30L);
-
-        return new Question(authorId, title, body, tags, points);
-    }
-
     public void adopt(Long userId, AnswerId answerId) {
         if (this.authorId.value() != userId) {
             throw new InvalidUser();
@@ -168,5 +159,34 @@ public class Question {
         }
 
         likeUserIds.add(likeUserId);
+    }
+
+    public QuestionCreationDto toCreationDto() {
+        return new QuestionCreationDto(id);
+    }
+
+    public QuestionModificationDto toModificationDto() {
+        return new QuestionModificationDto(id);
+    }
+
+    public static Question fake() {
+        AuthorId authorId = new AuthorId(1L);
+        Title title = new Title("CORS 에러가 발생합니다");
+        Body body = new Body("서버 배포 후 CORS에러가 발생합니다.");
+        Set<Tag> tags = Set.of(new Tag("Web"));
+        Points points = new Points(30L);
+
+        return new Question(authorId, title, body, tags, points);
+    }
+
+    public boolean isAuthor(Long userId) {
+        return authorId.value() == userId;
+    }
+
+    public void modify(QuestionDto questionDto) {
+        title = new Title(questionDto.getTitle());
+        body = new Body(questionDto.getBody());
+        tags = questionDto.getTags().stream().map(tag -> new Tag(tag.getName()))
+                .collect(Collectors.toSet());
     }
 }

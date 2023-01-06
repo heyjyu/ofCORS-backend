@@ -4,9 +4,11 @@ import kr.heyjyu.ofcors.application.AdoptAnswerService;
 import kr.heyjyu.ofcors.application.CreateQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionsService;
+import kr.heyjyu.ofcors.application.ModifyQuestionService;
 import kr.heyjyu.ofcors.dtos.AdoptRequestDto;
 import kr.heyjyu.ofcors.dtos.QuestionCreationDto;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
+import kr.heyjyu.ofcors.dtos.QuestionModificationDto;
 import kr.heyjyu.ofcors.dtos.QuestionRequestDto;
 import kr.heyjyu.ofcors.dtos.QuestionsDto;
 import kr.heyjyu.ofcors.models.AnswerId;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,12 +43,14 @@ public class QuestionController {
     private GetQuestionService getQuestionService;
     private CreateQuestionService createQuestionService;
     private AdoptAnswerService adoptAnswerService;
+    private ModifyQuestionService modifyQuestionService;
 
-    public QuestionController(GetQuestionsService getQuestionsService, GetQuestionService getQuestionService, CreateQuestionService createQuestionService, AdoptAnswerService adoptAnswerService) {
+    public QuestionController(GetQuestionsService getQuestionsService, GetQuestionService getQuestionService, CreateQuestionService createQuestionService, AdoptAnswerService adoptAnswerService, ModifyQuestionService modifyQuestionService) {
         this.getQuestionsService = getQuestionsService;
         this.getQuestionService = getQuestionService;
         this.createQuestionService = createQuestionService;
         this.adoptAnswerService = adoptAnswerService;
+        this.modifyQuestionService = modifyQuestionService;
     }
 
     @GetMapping
@@ -91,5 +96,14 @@ public class QuestionController {
         AnswerId answerId = new AnswerId(adoptRequestDto.getAnswerId());
 
         adoptAnswerService.adopt(userId, questionId, answerId);
+    }
+
+    @PutMapping("{id}")
+    public QuestionModificationDto modify(@RequestAttribute Long userId, @PathVariable Long id, @RequestBody QuestionDto questionDto) {
+        QuestionId questionId = new QuestionId(id);
+
+        Question question = modifyQuestionService.modify(userId, questionId, questionDto);
+
+        return question.toModificationDto();
     }
 }

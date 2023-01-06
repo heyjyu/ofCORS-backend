@@ -4,6 +4,7 @@ import kr.heyjyu.ofcors.application.AdoptAnswerService;
 import kr.heyjyu.ofcors.application.CreateQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionsService;
+import kr.heyjyu.ofcors.application.ModifyQuestionService;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
 import kr.heyjyu.ofcors.models.Question;
 import kr.heyjyu.ofcors.utils.JwtUtil;
@@ -44,6 +45,9 @@ class QuestionControllerTest {
 
     @MockBean
     private AdoptAnswerService adoptAnswerService;
+
+    @MockBean
+    private ModifyQuestionService modifyQuestionService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -126,6 +130,35 @@ class QuestionControllerTest {
                                 "\"body\":\"서버 배포 후 CORS 에러가 발생합니다.\"" +
                                 "}"))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void modify() throws Exception {
+        given(modifyQuestionService.modify(any(), any(), any()))
+                .willReturn(Question.fake());
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/questions/1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"id\":1," +
+                                "\"author\":{" +
+                                "\"id\":1," +
+                                "\"displayName\":\"joo\"," +
+                                "\"imageUrl\":\"https://ui-avatars.com/api/?name=joo&background=0D8ABC&color=fff\"" +
+                                "}," +
+                                "\"status\":\"open\"," +
+                                "\"title\":\"No 'Access-Control-Allow-Origin' 에러가 발생합니다\"," +
+                                "\"body\":\"서버 배포 후 CORS 에러가 발생합니다.\"," +
+                                "\"tags\":[\"Web\"]," +
+                                "\"points\":\"30\"," +
+                                "\"likeUserIds\":[]," +
+                                "\"selectedAnswerID\":-1," +
+                                "\"hits\":0," +
+                                "\"createdAt\":\"2023-01-06T15:34:38.606682\"," +
+                                "\"updatedAt\":\"2023-01-06T15:34:38.606743\"" +
+                                "}"))
+                .andExpect(status().isOk());
     }
 
     @Test
