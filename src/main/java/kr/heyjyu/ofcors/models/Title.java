@@ -2,6 +2,7 @@ package kr.heyjyu.ofcors.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kr.heyjyu.ofcors.exceptions.EmptyTitle;
 
 import java.util.Objects;
 
@@ -14,6 +15,10 @@ public class Title {
     }
 
     public Title(String value) {
+        if (value == null || value.equals("")) {
+            throw new EmptyTitle();
+        }
+
         this.value = value;
     }
 
