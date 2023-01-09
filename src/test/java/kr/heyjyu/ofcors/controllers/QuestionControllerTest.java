@@ -2,6 +2,7 @@ package kr.heyjyu.ofcors.controllers;
 
 import kr.heyjyu.ofcors.application.AdoptAnswerService;
 import kr.heyjyu.ofcors.application.CreateQuestionService;
+import kr.heyjyu.ofcors.application.DeleteQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionsService;
 import kr.heyjyu.ofcors.application.ModifyQuestionService;
@@ -48,6 +49,9 @@ class QuestionControllerTest {
 
     @MockBean
     private ModifyQuestionService modifyQuestionService;
+
+    @MockBean
+    private DeleteQuestionService deleteQuestionService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -159,6 +163,13 @@ class QuestionControllerTest {
                                 "\"updatedAt\":\"2023-01-06T15:34:38.606743\"" +
                                 "}"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/questions/1")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNoContent());
     }
 
     @Test

@@ -2,6 +2,7 @@ package kr.heyjyu.ofcors.controllers;
 
 import kr.heyjyu.ofcors.application.AdoptAnswerService;
 import kr.heyjyu.ofcors.application.CreateQuestionService;
+import kr.heyjyu.ofcors.application.DeleteQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionService;
 import kr.heyjyu.ofcors.application.GetQuestionsService;
 import kr.heyjyu.ofcors.application.ModifyQuestionService;
@@ -19,6 +20,7 @@ import kr.heyjyu.ofcors.models.QuestionId;
 import kr.heyjyu.ofcors.models.Tag;
 import kr.heyjyu.ofcors.models.Title;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,13 +46,15 @@ public class QuestionController {
     private CreateQuestionService createQuestionService;
     private AdoptAnswerService adoptAnswerService;
     private ModifyQuestionService modifyQuestionService;
+    private DeleteQuestionService deleteQuestionService;
 
-    public QuestionController(GetQuestionsService getQuestionsService, GetQuestionService getQuestionService, CreateQuestionService createQuestionService, AdoptAnswerService adoptAnswerService, ModifyQuestionService modifyQuestionService) {
+    public QuestionController(GetQuestionsService getQuestionsService, GetQuestionService getQuestionService, CreateQuestionService createQuestionService, AdoptAnswerService adoptAnswerService, ModifyQuestionService modifyQuestionService, DeleteQuestionService deleteQuestionService) {
         this.getQuestionsService = getQuestionsService;
         this.getQuestionService = getQuestionService;
         this.createQuestionService = createQuestionService;
         this.adoptAnswerService = adoptAnswerService;
         this.modifyQuestionService = modifyQuestionService;
+        this.deleteQuestionService = deleteQuestionService;
     }
 
     @GetMapping
@@ -105,5 +109,13 @@ public class QuestionController {
         Question question = modifyQuestionService.modify(userId, questionId, questionDto);
 
         return question.toModificationDto();
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@RequestAttribute Long userId, @PathVariable Long id) {
+        QuestionId questionId = new QuestionId(id);
+
+        deleteQuestionService.delete(userId, questionId);
     }
 }
