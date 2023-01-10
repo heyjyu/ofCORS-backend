@@ -96,4 +96,12 @@ public class Answer {
 
         likeUserIds.add(likeUserId);
     }
+
+    public boolean isAuthor(Long userId) {
+        return authorId.value() == userId;
+    }
+
+    public void modify(Body body) {
+        this.body = body;
+    }
 }
