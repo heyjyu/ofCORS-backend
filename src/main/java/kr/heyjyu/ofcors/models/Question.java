@@ -189,4 +189,8 @@ public class Question {
         tags = questionDto.getTags().stream().map(tag -> new Tag(tag.getName()))
                 .collect(Collectors.toSet());
     }
+
+    public boolean isClosed() {
+        return status == QuestionStatus.CLOSED;
+    }
 }

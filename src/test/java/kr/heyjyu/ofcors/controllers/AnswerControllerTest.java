@@ -3,8 +3,8 @@ package kr.heyjyu.ofcors.controllers;
 import kr.heyjyu.ofcors.application.CreateAnswerService;
 import kr.heyjyu.ofcors.application.GetAnswerService;
 import kr.heyjyu.ofcors.application.GetAnswersService;
+import kr.heyjyu.ofcors.application.ModifyAnswerService;
 import kr.heyjyu.ofcors.dtos.AnswerDto;
-import kr.heyjyu.ofcors.dtos.QuestionDto;
 import kr.heyjyu.ofcors.models.Answer;
 import kr.heyjyu.ofcors.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,6 @@ import java.util.List;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,6 +40,9 @@ class AnswerControllerTest {
 
     @MockBean
     private GetAnswerService getAnswerService;
+
+    @MockBean
+    private ModifyAnswerService modifyAnswerService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -109,5 +111,27 @@ class AnswerControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/answers/1"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void modify() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/answers/1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"body\":\"수정한 답변입니다.\"" +
+                                "}"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void modifyWithEmptyBody() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/answers/1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"body\":\"\"" +
+                                "}"))
+                .andExpect(status().isBadRequest());
     }
 }

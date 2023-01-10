@@ -29,6 +29,8 @@ class QuestionTest {
 
         assertThat(question.getSelectedAnswerId())
                 .isEqualTo(answerId);
+
+        assertThat(question.isClosed()).isTrue();
     }
 
     @Test

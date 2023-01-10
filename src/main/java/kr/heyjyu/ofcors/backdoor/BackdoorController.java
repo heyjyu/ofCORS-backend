@@ -67,6 +67,16 @@ public class BackdoorController {
                 now, now
         );
 
+        jdbcTemplate.update("" +
+                        "INSERT INTO users(" +
+                        "  id, about, display_name, email, image_url, name," +
+                        "  encoded_password, points, created_at, updated_at" +
+                        ")" +
+                        " VALUES(3, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "저는 함수형 프로그래밍을 좋아합니다", "joo2", "tester3@example.com", "https://ui-avatars.com/api/?name=joo3&background=0D8ABC&color=fff", "동길홍", passwordEncoder.encode("Abcdef1!"), 100L,
+                now, now
+        );
+
         return "OK";
     }
 
