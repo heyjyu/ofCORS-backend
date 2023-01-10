@@ -3,10 +3,13 @@ package kr.heyjyu.ofcors.controllers;
 import kr.heyjyu.ofcors.application.CountUserService;
 import kr.heyjyu.ofcors.application.CreateUserService;
 import kr.heyjyu.ofcors.application.GetUserService;
+import kr.heyjyu.ofcors.application.GetUsersService;
+import kr.heyjyu.ofcors.dtos.UserDto;
 import kr.heyjyu.ofcors.exceptions.ExistingEmail;
 import kr.heyjyu.ofcors.models.Email;
 import kr.heyjyu.ofcors.models.User;
 import kr.heyjyu.ofcors.utils.JwtUtil;
+import org.apache.catalina.Group;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,10 +44,16 @@ class UserControllerTest {
     @MockBean
     private CountUserService countUserService;
 
+    @MockBean
+    private GetUsersService getUsersService;
+
     @SpyBean
     private JwtUtil jwtUtil;
 
     private String token;
+
+    UserControllerTest() {
+    }
 
     @BeforeEach
     void setup() {
@@ -54,10 +65,22 @@ class UserControllerTest {
         given(countUserService.count(any()))
                 .willReturn(1);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/users?countOnly=true&email=\"exist@email.com\""))
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/count?email=exist@email.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"count\":1")
+                ));
+    }
+
+    @Test
+    void list() throws Exception {
+        given(getUsersService.getUsers(any(), any(), any()))
+                .willReturn(List.of(UserDto.fake()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users?sort=like&keyword=web"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"users\":[")
                 ));
     }
 
