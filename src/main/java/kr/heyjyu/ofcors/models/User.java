@@ -10,12 +10,16 @@ import kr.heyjyu.ofcors.dtos.UserCreationDto;
 import kr.heyjyu.ofcors.dtos.UserDto;
 import kr.heyjyu.ofcors.exceptions.NotEnoughPoints;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "USERS")
@@ -34,7 +38,7 @@ public class User {
     private DisplayName displayName;
 
     @ElementCollection
-    private List<Tag> tags = new ArrayList<>();
+    private Set<Tag> tags = new HashSet<>();
 
     @Embedded
     private About about;
@@ -53,6 +57,21 @@ public class User {
 
     @ElementCollection
     private List<ScrapId> scrapIds = new ArrayList<>();
+
+    @Formula("(SELECT COUNT(*) " +
+            "FROM question_like_user_ids ql " +
+            "JOIN question q " +
+            "ON ql.question_id = q.id " +
+            "WHERE q.author_id = id" +
+            ") " +
+            "+ " +
+            "(SELECT COUNT(*) " +
+            "FROM answer_like_user_ids al " +
+            "JOIN answer a " +
+            "ON al.answer_id = a.id " +
+            "WHERE a.author_id = id" +
+            ")")
+    private Long countOfLikes;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -101,7 +120,7 @@ public class User {
         return displayName;
     }
 
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
@@ -127,6 +146,10 @@ public class User {
 
     public List<ScrapId> getScrapIds() {
         return scrapIds;
+    }
+
+    public Long getCountOfLikes() {
+        return countOfLikes;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -160,7 +183,9 @@ public class User {
                 this.about.value(),
                 this.points.value(),
                 this.name.value(),
-                this.imageUrl.value());
+                this.imageUrl.value(),
+                this.countOfLikes,
+                this.tags.stream().map(Tag::toDto).collect(Collectors.toSet()));
     }
 
     public UserCreationDto toCreationDto() {

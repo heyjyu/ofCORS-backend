@@ -3,11 +3,12 @@ package kr.heyjyu.ofcors.controllers;
 import kr.heyjyu.ofcors.application.CountUserService;
 import kr.heyjyu.ofcors.application.CreateUserService;
 import kr.heyjyu.ofcors.application.GetUserService;
+import kr.heyjyu.ofcors.application.GetUsersService;
 import kr.heyjyu.ofcors.dtos.UserCountDto;
 import kr.heyjyu.ofcors.dtos.UserCreationDto;
 import kr.heyjyu.ofcors.dtos.UserDto;
 import kr.heyjyu.ofcors.dtos.UserRegistrationDto;
-import kr.heyjyu.ofcors.exceptions.AuthenticationError;
+import kr.heyjyu.ofcors.dtos.UsersDto;
 import kr.heyjyu.ofcors.exceptions.SignUpFailed;
 import kr.heyjyu.ofcors.models.DisplayName;
 import kr.heyjyu.ofcors.models.Email;
@@ -27,16 +28,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("users")
 public class UserController {
+    private GetUsersService getUsersService;
     private GetUserService getUserService;
     private CountUserService countUserService;
     private CreateUserService createUserService;
 
-    public UserController(GetUserService getUserService,
+    public UserController(GetUsersService getUsersService,
+                          GetUserService getUserService,
                           CountUserService countUserService,
                           CreateUserService createUserService) {
+        this.getUsersService = getUsersService;
         this.getUserService = getUserService;
         this.countUserService = countUserService;
         this.createUserService = createUserService;
+    }
+
+    @GetMapping
+    public UsersDto list(@RequestParam(required = false, defaultValue = "") String sort,
+                         @RequestParam(required = false, defaultValue = "") String keyword,
+                         @RequestParam(required = false, defaultValue = "30") Integer size) {
+        return new UsersDto(getUsersService.getUsers(sort, keyword, size));
     }
 
     @GetMapping("me")
@@ -46,13 +57,9 @@ public class UserController {
         return user.toDto();
     }
 
-    @GetMapping
-    public UserCountDto userCount(@RequestParam boolean countOnly, String email) {
-        if (countOnly) {
-            return new UserCountDto(countUserService.count(new Email(email)));
-        }
-
-        return null;
+    @GetMapping("count")
+    public UserCountDto userCount(@RequestParam String email) {
+        return new UserCountDto(countUserService.count(new Email(email)));
     }
 
     @PostMapping

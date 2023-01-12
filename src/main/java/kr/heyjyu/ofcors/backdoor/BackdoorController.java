@@ -58,6 +58,14 @@ public class BackdoorController {
         );
 
         jdbcTemplate.update("" +
+                        "INSERT INTO user_tags(" +
+                        "  user_id, tag" +
+                        ")" +
+                        " VALUES(?, ?)",
+                1L, "Web"
+        );
+
+        jdbcTemplate.update("" +
                         "INSERT INTO users(" +
                         "  id, about, display_name, email, image_url, name," +
                         "  encoded_password, points, created_at, updated_at" +
