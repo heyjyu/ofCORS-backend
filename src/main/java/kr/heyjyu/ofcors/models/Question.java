@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import kr.heyjyu.ofcors.dtos.QuestionCreationDto;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
 import kr.heyjyu.ofcors.dtos.QuestionModificationDto;
-import kr.heyjyu.ofcors.dtos.TagDto;
 import kr.heyjyu.ofcors.exceptions.AlreadyAdopted;
 import kr.heyjyu.ofcors.exceptions.InvalidUser;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,7 +20,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

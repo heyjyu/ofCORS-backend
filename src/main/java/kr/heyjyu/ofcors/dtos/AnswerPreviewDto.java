@@ -3,27 +3,27 @@ package kr.heyjyu.ofcors.dtos;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-public class AnswerDto {
+public class AnswerPreviewDto {
     private Long id;
-    private Long questionId;
+    private QuestionDto question;
     private AuthorDto author;
     private String body;
     private Set<LikeUserIdDto> likeUserIds;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public AnswerDto() {
+    public AnswerPreviewDto() {
     }
 
-    public AnswerDto(Long id
-            , Long questionId
-            , AuthorDto author
-            , String body
-            , Set<LikeUserIdDto> likeUserIds
-            , LocalDateTime createdAt
-            , LocalDateTime updatedAt) {
+    public AnswerPreviewDto(Long id,
+                            QuestionDto question,
+                            AuthorDto author,
+                            String body,
+                            Set<LikeUserIdDto> likeUserIds,
+                            LocalDateTime createdAt,
+                            LocalDateTime updatedAt) {
         this.id = id;
-        this.questionId = questionId;
+        this.question = question;
         this.author = author;
         this.body = body;
         this.likeUserIds = likeUserIds;
@@ -35,8 +35,8 @@ public class AnswerDto {
         return id;
     }
 
-    public Long getQuestionId() {
-        return questionId;
+    public QuestionDto getQuestion() {
+        return question;
     }
 
     public AuthorDto getAuthor() {
@@ -59,10 +59,10 @@ public class AnswerDto {
         return updatedAt;
     }
 
-    public static AnswerDto fake() {
-        return new AnswerDto(
+    public static AnswerPreviewDto fake() {
+        return new AnswerPreviewDto(
                 1L,
-                1L,
+                QuestionDto.fake(),
                 AuthorDto.fake(),
                 "헤더를 추가해보세요",
                 Set.of(new LikeUserIdDto(2L)),

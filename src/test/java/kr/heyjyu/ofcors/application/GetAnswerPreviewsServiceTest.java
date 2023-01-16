@@ -1,9 +1,10 @@
 package kr.heyjyu.ofcors.application;
 
 import kr.heyjyu.ofcors.models.Answer;
-import kr.heyjyu.ofcors.models.QuestionId;
+import kr.heyjyu.ofcors.models.Question;
 import kr.heyjyu.ofcors.models.User;
 import kr.heyjyu.ofcors.repositories.AnswerRepository;
+import kr.heyjyu.ofcors.repositories.QuestionRepository;
 import kr.heyjyu.ofcors.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,29 +17,35 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class GetAnswersServiceTest {
+class GetAnswerPreviewsServiceTest {
     private AnswerRepository answerRepository;
     private UserRepository userRepository;
-    private GetAnswersService getAnswersService;
+    private QuestionRepository questionRepository;
+    private GetAnswerPreviewsService getAnswerPreviewsService;
 
     @BeforeEach
     void setup() {
         answerRepository = mock(AnswerRepository.class);
         userRepository = mock(UserRepository.class);
-        getAnswersService = new GetAnswersService(answerRepository, userRepository);
+        questionRepository = mock(QuestionRepository.class);
+
+        getAnswerPreviewsService = new GetAnswerPreviewsService(answerRepository, userRepository, questionRepository);
     }
 
     @Test
-    void getAnswers() {
-        given(answerRepository.findAllByQuestionId(any()))
+    void getAnswerPreviews() {
+        given(answerRepository.findAllByAuthorId(any(), any()))
                 .willReturn(List.of(Answer.fake()));
 
         given(userRepository.findById(any()))
                 .willReturn(Optional.of(User.fake()));
 
-        Long questionId = 1L;
+        given(questionRepository.findById(any()))
+                .willReturn(Optional.of(Question.fake()));
 
-        assertThat(getAnswersService.getAnswers(questionId))
+        Long userId = 1L;
+
+        assertThat(getAnswerPreviewsService.getAnswerPreviews(userId))
                 .hasSize(1);
     }
 }

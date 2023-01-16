@@ -25,4 +25,8 @@ public class AuthorDto {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public static AuthorDto fake() {
+        return new AuthorDto(1L, "joo", "https://ui-avatars.com/api/?name=Joo&background=0D8ABC&color=fff");
+    }
 }

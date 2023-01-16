@@ -18,51 +18,29 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class GetQuestionsServiceTest {
+class GetQuestionPreviewsServiceTest {
     private QuestionRepository questionRepository;
     private UserRepository userRepository;
-    private GetQuestionsService getQuestionsService;
+    private GetQuestionPreviewsService getQuestionPreviewsService;
 
     @BeforeEach
     void setup() {
         questionRepository = mock(QuestionRepository.class);
         userRepository = mock(UserRepository.class);
-        getQuestionsService = new GetQuestionsService(questionRepository, userRepository);
+        getQuestionPreviewsService = new GetQuestionPreviewsService(questionRepository, userRepository);
     }
 
     @Test
-    void getTopQuestions() {
-        given(questionRepository.findAll(any(Specification.class), any(Pageable.class)))
-                .willReturn(new PageImpl<>(List.of(Question.fake())));
-
-        given(userRepository.findById(any()))
-                .willReturn(Optional.of(User.fake()));
-
-        String sort = "like";
-        String period = "week";
-        String status = "open";
-        String keyword = "";
-        Integer size = 30;
-
-        assertThat(getQuestionsService.getQuestions(sort, period, status, keyword, size))
-                .hasSize(1);
-    }
-
-    @Test
-    void getSearchResult() {
+    void getQuestionPreviews() {
         given(userRepository.findById(any()))
                 .willReturn(Optional.of(User.fake()));
 
         given(questionRepository.findAll(any(Specification.class), any(Pageable.class)))
                 .willReturn(new PageImpl<>(List.of(Question.fake())));
 
-        String sort = "like";
-        String period = "";
-        String status = "closed";
-        String keyword = "CORS";
-        Integer size = 30;
+        Long userId = 1L;
 
-        assertThat(getQuestionsService.getQuestions(sort, period, status, keyword, size))
+        assertThat(getQuestionPreviewsService.getQuestionPreviews(userId))
                 .hasSize(1);
     }
 }
