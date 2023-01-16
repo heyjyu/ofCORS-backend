@@ -26,8 +26,8 @@ public class GetAnswersService {
         this.userRepository = userRepository;
     }
 
-    public List<AnswerDto> getAnswers(QuestionId questionId) {
-        List<Answer> answers = answerRepository.findAllByQuestionId(questionId);
+    public List<AnswerDto> getAnswers(Long questionId) {
+        List<Answer> answers = answerRepository.findAllByQuestionId(new QuestionId(questionId));
 
         return answers
                 .stream()

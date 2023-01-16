@@ -12,6 +12,7 @@ import kr.heyjyu.ofcors.dtos.AnswersDto;
 import kr.heyjyu.ofcors.exceptions.EmptyBody;
 import kr.heyjyu.ofcors.models.Answer;
 import kr.heyjyu.ofcors.models.AnswerId;
+import kr.heyjyu.ofcors.models.AuthorId;
 import kr.heyjyu.ofcors.models.Body;
 import kr.heyjyu.ofcors.models.QuestionId;
 import org.springframework.http.HttpStatus;
@@ -43,8 +44,8 @@ public class AnswerController {
     }
 
     @GetMapping
-    public AnswersDto list(@RequestParam Long questionId) {
-        return new AnswersDto(getAnswersService.getAnswers(new QuestionId(questionId)));
+    public AnswersDto list(@RequestParam(required = false, defaultValue = "") Long questionId) {
+        return new AnswersDto(getAnswersService.getAnswers(questionId));
     }
 
     @GetMapping("{id}")

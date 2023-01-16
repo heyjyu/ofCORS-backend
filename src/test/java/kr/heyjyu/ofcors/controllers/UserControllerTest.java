@@ -85,6 +85,15 @@ class UserControllerTest {
     }
 
     @Test
+    void detail() throws Exception {
+        given(getUserService.getUser(any()))
+                .willReturn(User.fake());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void user() throws Exception {
         given(getUserService.getUser(any()))
                 .willReturn(User.fake());

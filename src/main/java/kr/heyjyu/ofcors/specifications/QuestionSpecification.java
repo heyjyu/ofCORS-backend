@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import kr.heyjyu.ofcors.models.AuthorId;
 import kr.heyjyu.ofcors.models.Question;
 import kr.heyjyu.ofcors.models.QuestionStatus;
 import org.springframework.data.jpa.domain.Specification;
@@ -49,6 +50,15 @@ public class QuestionSpecification {
                 return criteriaBuilder.or(
                         criteriaBuilder.like(criteriaBuilder.upper(root.get("body").get("value")), "%" + keyword.toUpperCase() + "%"),
                         criteriaBuilder.like(criteriaBuilder.upper(root.get("title").get("value")), "%" + keyword.toUpperCase() + "%"));
+            }
+        };
+    }
+
+    public static Specification<Question> equalAuthorId(AuthorId authorId) {
+        return new Specification<Question>() {
+            @Override
+            public Predicate toPredicate(Root<Question> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.equal(root.get("authorId"), authorId);
             }
         };
     }
