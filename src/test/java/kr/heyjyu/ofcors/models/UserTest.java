@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.map;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserTest {
@@ -33,6 +34,20 @@ class UserTest {
         user.changeImageUrl(imageUrl);
 
         assertThat(user.getImageUrl()).isEqualTo(imageUrl);
+    }
+
+    @Test
+    void editProfile() {
+        User user = User.fake();
+
+        DisplayName displayName = new DisplayName("hong");
+        About about = new About("저는 함수형 프로그래밍을 좋아합니다");
+        ImageUrl imageUrl = new ImageUrl("https://image.com");
+        Set<Tag> tags = Set.of(new Tag("Web"));
+
+        user.editProfile(displayName, about, imageUrl, tags);
+
+        assertThat(user.getDisplayName()).isEqualTo(displayName);
     }
 
     @Test
