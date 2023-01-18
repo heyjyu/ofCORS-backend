@@ -203,4 +203,11 @@ public class User {
     public void receive(Points points) {
         this.points = this.points.add(points);
     }
+
+    public void editProfile(DisplayName displayName, About about, ImageUrl imageUrl, Set<Tag> tags) {
+        this.displayName = displayName;
+        this.about = about;
+        this.imageUrl = imageUrl;
+        this.tags = tags;
+    }
 }

@@ -2,6 +2,7 @@ package kr.heyjyu.ofcors.controllers;
 
 import kr.heyjyu.ofcors.application.CountUserService;
 import kr.heyjyu.ofcors.application.CreateUserService;
+import kr.heyjyu.ofcors.application.EditProfileService;
 import kr.heyjyu.ofcors.application.GetUserService;
 import kr.heyjyu.ofcors.application.GetUsersService;
 import kr.heyjyu.ofcors.dtos.UserDto;
@@ -46,6 +47,9 @@ class UserControllerTest {
 
     @MockBean
     private GetUsersService getUsersService;
+
+    @MockBean
+    private EditProfileService editProfileService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -104,6 +108,20 @@ class UserControllerTest {
                 .andExpect(content().string(
                         containsString("\"points\"")
                 ));
+    }
+
+    @Test
+    void editProfile() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/users/me")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"displayName\":\"hong\"," +
+                                "\"about\":\"저는 함수형 프로그래밍을 좋아합니다\"," +
+                                "\"imageUrl\":\"https://image.com\"," +
+                                "\"tags\":[\"Web\"]" +
+                                "}"))
+                .andExpect(status().isNoContent());
     }
 
     @Test
