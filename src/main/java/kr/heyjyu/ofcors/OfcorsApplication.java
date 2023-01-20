@@ -2,6 +2,7 @@ package kr.heyjyu.ofcors;
 
 import kr.heyjyu.ofcors.interceptors.AuthenticationInterceptor;
 import kr.heyjyu.ofcors.utils.JwtUtil;
+import kr.heyjyu.ofcors.utils.KakaoPay;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class OfcorsApplication {
 	@Value("${jwt.secret}")
 	private String secret;
+
+	@Value("${kakaopay.admin-key}")
+	private String adminKey;
 
 	public static void main(String[] args) {
 		SpringApplication.run(OfcorsApplication.class, args);
@@ -57,5 +61,10 @@ public class OfcorsApplication {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new Argon2PasswordEncoder(16, 32, 1, 1 << 14, 2);
+	}
+
+	@Bean
+	public KakaoPay kakaoPay() {
+		return new KakaoPay(adminKey);
 	}
 }
