@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import kr.heyjyu.ofcors.dtos.QuestionCreationDto;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
 import kr.heyjyu.ofcors.dtos.QuestionModificationDto;
+import kr.heyjyu.ofcors.dtos.QuestionScrapResultDto;
 import kr.heyjyu.ofcors.exceptions.AlreadyAdopted;
 import kr.heyjyu.ofcors.exceptions.InvalidUser;
 import org.hibernate.annotations.CreationTimestamp;
@@ -52,6 +53,9 @@ public class Question {
 
     @Formula("(SELECT COUNT(*) FROM question_like_user_ids l WHERE l.question_id = id)")
     private int countOfLikes;
+
+    @ElementCollection
+    private Set<ScrapUserId> scrapUserIds = new HashSet<>();
 
     @Embedded
     @AttributeOverride(name="value", column = @Column(name = "SELECTED_ANSWER_ID"))
@@ -120,6 +124,10 @@ public class Question {
         return countOfLikes;
     }
 
+    public Set<ScrapUserId> getScrapUserIds() {
+        return scrapUserIds;
+    }
+
     public AnswerId getSelectedAnswerId() {
         return selectedAnswerId;
     }
@@ -159,24 +167,6 @@ public class Question {
         likeUserIds.add(likeUserId);
     }
 
-    public QuestionCreationDto toCreationDto() {
-        return new QuestionCreationDto(id);
-    }
-
-    public QuestionModificationDto toModificationDto() {
-        return new QuestionModificationDto(id);
-    }
-
-    public static Question fake() {
-        AuthorId authorId = new AuthorId(1L);
-        Title title = new Title("CORS 에러가 발생합니다");
-        Body body = new Body("서버 배포 후 CORS에러가 발생합니다.");
-        Set<Tag> tags = Set.of(new Tag("Web"));
-        Points points = new Points(30L);
-
-        return new Question(authorId, title, body, tags, points);
-    }
-
     public boolean isAuthor(Long userId) {
         return authorId.value() == userId;
     }
@@ -190,5 +180,35 @@ public class Question {
 
     public boolean isClosed() {
         return status == QuestionStatus.CLOSED;
+    }
+
+    public void addScrappedUser(Long userId) {
+        this.scrapUserIds.add(new ScrapUserId(userId));
+    }
+
+    public void removeScrappedUser(Long userId) {
+        this.scrapUserIds.remove(new ScrapUserId(userId));
+    }
+
+    public QuestionCreationDto toCreationDto() {
+        return new QuestionCreationDto(id);
+    }
+
+    public QuestionModificationDto toModificationDto() {
+        return new QuestionModificationDto(id);
+    }
+
+    public QuestionScrapResultDto toScrapResultDto() {
+        return new QuestionScrapResultDto(scrapUserIds.stream().map(ScrapUserId::toDto).collect(Collectors.toSet()));
+    }
+
+    public static Question fake() {
+        AuthorId authorId = new AuthorId(1L);
+        Title title = new Title("CORS 에러가 발생합니다");
+        Body body = new Body("서버 배포 후 CORS에러가 발생합니다.");
+        Set<Tag> tags = Set.of(new Tag("Web"));
+        Points points = new Points(30L);
+
+        return new Question(authorId, title, body, tags, points);
     }
 }
