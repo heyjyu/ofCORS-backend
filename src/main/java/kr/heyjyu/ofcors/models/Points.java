@@ -19,6 +19,10 @@ public class Points {
         this.value = value;
     }
 
+    public Points(Quantity quantity) {
+        this.value = quantity.value();
+    }
+
     public Long value() {
         return value;
     }

@@ -210,4 +210,8 @@ public class User {
         this.imageUrl = imageUrl;
         this.tags = tags;
     }
+
+    public void buyPoints(Points points) {
+        this.points = this.points.add(points);
+    }
 }

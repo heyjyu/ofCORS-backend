@@ -129,4 +129,17 @@ class UserTest {
 
         assertThrows(NotEnoughPoints.class, () -> sender.transfer(receiver, points));
     }
+
+    @Test
+    void buyPoints() {
+        User user = User.fake();
+
+        Points initialPoints = user.getPoints();
+
+        Points points = new Points(10L);
+
+        user.buyPoints(points);
+
+        assertThat(user.getPoints()).isEqualTo(initialPoints.add(points));
+    }
 }
