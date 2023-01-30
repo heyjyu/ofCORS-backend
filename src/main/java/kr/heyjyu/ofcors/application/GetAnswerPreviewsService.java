@@ -12,6 +12,7 @@ import kr.heyjyu.ofcors.models.AnswerId;
 import kr.heyjyu.ofcors.models.AuthorId;
 import kr.heyjyu.ofcors.models.LikeUserId;
 import kr.heyjyu.ofcors.models.Question;
+import kr.heyjyu.ofcors.models.ScrapUserId;
 import kr.heyjyu.ofcors.models.Tag;
 import kr.heyjyu.ofcors.models.User;
 import kr.heyjyu.ofcors.repositories.AnswerRepository;
@@ -79,6 +80,7 @@ public class GetAnswerPreviewsService {
                                             question.getTags().stream().map(Tag::toDto).collect(Collectors.toSet()),
                                             question.getPoints().value(),
                                             question.getLikeUserIds().stream().map(LikeUserId::toDto).collect(Collectors.toSet()),
+                                            question.getScrapUserIds().stream().map(ScrapUserId::toDto).collect(Collectors.toSet()),
                                             selectedAnswerId,
                                             question.getHits().value(),
                                             question.getCreatedAt(),

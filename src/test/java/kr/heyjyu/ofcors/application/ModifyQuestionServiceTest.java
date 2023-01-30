@@ -3,6 +3,7 @@ package kr.heyjyu.ofcors.application;
 import kr.heyjyu.ofcors.dtos.AuthorDto;
 import kr.heyjyu.ofcors.dtos.LikeUserIdDto;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
+import kr.heyjyu.ofcors.dtos.ScrapUserIdDto;
 import kr.heyjyu.ofcors.dtos.TagDto;
 import kr.heyjyu.ofcors.exceptions.EmptyBody;
 import kr.heyjyu.ofcors.exceptions.EmptyTitle;
@@ -101,6 +102,7 @@ class ModifyQuestionServiceTest {
                 Set.of(new TagDto("Web")),
                 30L,
                 Set.of(new LikeUserIdDto(2L)),
+                Set.of(new ScrapUserIdDto(2L)),
                 1L,
                 2L,
                 LocalDateTime.now(),
@@ -125,6 +127,7 @@ class ModifyQuestionServiceTest {
                 Set.of(new TagDto("Web")),
                 30L,
                 Set.of(new LikeUserIdDto(2L)),
+                Set.of(new ScrapUserIdDto(2L)),
                 1L,
                 2L,
                 LocalDateTime.now(),

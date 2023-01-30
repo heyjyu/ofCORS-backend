@@ -13,6 +13,7 @@ public class QuestionDto {
     private Set<TagDto> tags;
     private Long points;
     private Set<LikeUserIdDto> likeUserIds;
+    private Set<ScrapUserIdDto> scrapUserIds;
     private Long selectedAnswerId;
     private Long hits;
     private LocalDateTime createdAt;
@@ -26,6 +27,7 @@ public class QuestionDto {
                        Set<TagDto> tags,
                        Long points,
                        Set<LikeUserIdDto> likeUserIds,
+                       Set<ScrapUserIdDto> scrapUserIds,
                        Long selectedAnswerId,
                        Long hits,
                        LocalDateTime createdAt,
@@ -38,6 +40,7 @@ public class QuestionDto {
         this.tags = tags;
         this.points = points;
         this.likeUserIds = likeUserIds;
+        this.scrapUserIds = scrapUserIds;
         this.selectedAnswerId = selectedAnswerId;
         this.hits = hits;
         this.createdAt = createdAt;
@@ -76,6 +79,10 @@ public class QuestionDto {
         return likeUserIds;
     }
 
+    public Set<ScrapUserIdDto> getScrapUserIds() {
+        return scrapUserIds;
+    }
+
     public Long getSelectedAnswerId() {
         return selectedAnswerId;
     }
@@ -102,6 +109,7 @@ public class QuestionDto {
                 Set.of(new TagDto("Web")),
                 30L,
                 Set.of(new LikeUserIdDto(2L)),
+                Set.of(new ScrapUserIdDto(2L)),
                 1L,
                 2L,
                 LocalDateTime.now(),

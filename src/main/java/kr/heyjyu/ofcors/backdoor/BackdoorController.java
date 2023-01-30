@@ -32,6 +32,7 @@ public class BackdoorController {
         jdbcTemplate.execute("DELETE FROM users");
 
         jdbcTemplate.execute("DELETE FROM question_like_user_ids");
+        jdbcTemplate.execute("DELETE FROM question_scrap_user_ids");
         jdbcTemplate.execute("DELETE FROM question_tags");
         jdbcTemplate.execute("DELETE FROM question");
 
@@ -93,6 +94,7 @@ public class BackdoorController {
         LocalDateTime now = LocalDateTime.now();
 
         jdbcTemplate.execute("DELETE FROM question_like_user_ids");
+        jdbcTemplate.execute("DELETE FROM question_scrap_user_ids");
         jdbcTemplate.execute("DELETE FROM question_tags");
         jdbcTemplate.execute("DELETE FROM question");
 

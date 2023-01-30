@@ -3,6 +3,7 @@ package kr.heyjyu.ofcors.models;
 import kr.heyjyu.ofcors.dtos.AuthorDto;
 import kr.heyjyu.ofcors.dtos.LikeUserIdDto;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
+import kr.heyjyu.ofcors.dtos.ScrapUserIdDto;
 import kr.heyjyu.ofcors.dtos.TagDto;
 import kr.heyjyu.ofcors.exceptions.AlreadyAdopted;
 import kr.heyjyu.ofcors.exceptions.InvalidUser;
@@ -89,6 +90,7 @@ class QuestionTest {
                 Set.of(new TagDto("Web"), new TagDto("Error")),
                 30L,
                 Set.of(new LikeUserIdDto(2L)),
+                Set.of(new ScrapUserIdDto(2L)),
                 1L,
                 2L,
                 LocalDateTime.now(),
@@ -100,5 +102,23 @@ class QuestionTest {
         assertThat(question.getTitle().value()).isEqualTo(questionDto.getTitle());
         assertThat(question.getBody().value()).isEqualTo(questionDto.getBody());
         assertThat(question.getTags()).hasSize(2);
+    }
+
+    @Test
+    void addScrappedUser() {
+        Question question = Question.fake();
+
+        question.addScrappedUser(100L);
+
+        assertThat(question.getScrapUserIds()).contains(new ScrapUserId(100L));
+    }
+
+    @Test
+    void removeScrappedUser() {
+        Question question = Question.fake();
+
+        question.removeScrappedUser(100L);
+
+        assertThat(question.getScrapUserIds()).doesNotContain(new ScrapUserId(100L));
     }
 }
