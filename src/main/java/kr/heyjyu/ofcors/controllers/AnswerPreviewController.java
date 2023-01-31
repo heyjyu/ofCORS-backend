@@ -18,7 +18,9 @@ public class AnswerPreviewController {
     }
 
     @GetMapping
-    public AnswerPreviewsDto list(@RequestParam(required = false, defaultValue = "") Long userId) {
-        return new AnswerPreviewsDto(getAnswerPreviewsService.getAnswerPreviews(userId));
+    public AnswerPreviewsDto list(
+            @RequestParam(required = false, defaultValue = "") Long userId,
+            @RequestParam(required = false, defaultValue = "") String sort) {
+        return new AnswerPreviewsDto(getAnswerPreviewsService.getAnswerPreviews(userId, sort));
     }
 }
