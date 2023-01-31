@@ -17,7 +17,9 @@ public class QuestionPreviewController {
     }
 
     @GetMapping
-    public QuestionPreviewsDto list(@RequestParam(required = false, defaultValue = "") Long userId) {
-        return new QuestionPreviewsDto(getQuestionPreviewsService.getQuestionPreviews(userId));
+    public QuestionPreviewsDto list(
+            @RequestParam(required = false, defaultValue = "") Long userId,
+            @RequestParam(required = false, defaultValue = "") String sort) {
+        return new QuestionPreviewsDto(getQuestionPreviewsService.getQuestionPreviews(userId, sort));
     }
 }

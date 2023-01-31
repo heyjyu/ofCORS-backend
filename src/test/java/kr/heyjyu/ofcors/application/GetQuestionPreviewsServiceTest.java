@@ -39,8 +39,9 @@ class GetQuestionPreviewsServiceTest {
                 .willReturn(new PageImpl<>(List.of(Question.fake())));
 
         Long userId = 1L;
+        String sort = "createdAt";
 
-        assertThat(getQuestionPreviewsService.getQuestionPreviews(userId))
+        assertThat(getQuestionPreviewsService.getQuestionPreviews(userId, sort))
                 .hasSize(1);
     }
 }

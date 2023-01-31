@@ -2,15 +2,12 @@ package kr.heyjyu.ofcors.application;
 
 import jakarta.transaction.Transactional;
 import kr.heyjyu.ofcors.dtos.AuthorDto;
-import kr.heyjyu.ofcors.dtos.QuestionDto;
 import kr.heyjyu.ofcors.dtos.QuestionPreviewDto;
 import kr.heyjyu.ofcors.exceptions.UserNotFound;
-import kr.heyjyu.ofcors.models.Answer;
 import kr.heyjyu.ofcors.models.AnswerId;
 import kr.heyjyu.ofcors.models.AuthorId;
 import kr.heyjyu.ofcors.models.LikeUserId;
 import kr.heyjyu.ofcors.models.Question;
-import kr.heyjyu.ofcors.models.QuestionStatus;
 import kr.heyjyu.ofcors.models.Tag;
 import kr.heyjyu.ofcors.models.User;
 import kr.heyjyu.ofcors.repositories.QuestionRepository;
@@ -38,12 +35,20 @@ public class GetQuestionPreviewsService {
         this.userRepository = userRepository;
     }
 
-    public List<QuestionPreviewDto> getQuestionPreviews(Long userId) {
+    public List<QuestionPreviewDto> getQuestionPreviews(Long userId, String sort) {
         // TODO: get from request
         Integer page = 1;
         Integer size = 20;
 
         Sort sortBy = Sort.by("countOfLikes").descending();
+
+        if (sort.equals("createdAt")) {
+            sortBy = Sort.by("createdAt").descending();
+        }
+
+        if (sort.equals("points")) {
+            sortBy = Sort.by("points").descending();
+        }
 
         Pageable pageable = PageRequest.of(page - 1, size, sortBy);
 

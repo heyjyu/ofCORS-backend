@@ -29,10 +29,10 @@ class QuestionPreviewControllerTest {
 
     @Test
     void list() throws Exception {
-        given(getQuestionPreviewsService.getQuestionPreviews(any()))
+        given(getQuestionPreviewsService.getQuestionPreviews(any(), any()))
                 .willReturn(List.of(QuestionPreviewDto.fake()));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/question-previews?userId=1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/question-previews?userId=1&sort=createdAt"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"questionPreviews\":[")

@@ -44,8 +44,9 @@ class GetAnswerPreviewsServiceTest {
                 .willReturn(Optional.of(Question.fake()));
 
         Long userId = 1L;
+        String sort = "createdAt";
 
-        assertThat(getAnswerPreviewsService.getAnswerPreviews(userId))
+        assertThat(getAnswerPreviewsService.getAnswerPreviews(userId, sort))
                 .hasSize(1);
     }
 }

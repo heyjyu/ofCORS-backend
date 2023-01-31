@@ -1,7 +1,6 @@
 package kr.heyjyu.ofcors.application;
 
 import jakarta.transaction.Transactional;
-import kr.heyjyu.ofcors.dtos.AnswerDto;
 import kr.heyjyu.ofcors.dtos.AnswerPreviewDto;
 import kr.heyjyu.ofcors.dtos.AuthorDto;
 import kr.heyjyu.ofcors.dtos.QuestionDto;
@@ -40,12 +39,16 @@ public class GetAnswerPreviewsService {
         this.questionRepository = questionRepository;
     }
 
-    public List<AnswerPreviewDto> getAnswerPreviews(Long userId) {
+    public List<AnswerPreviewDto> getAnswerPreviews(Long userId, String sort) {
         // TODO: get from request
         Integer page = 1;
         Integer size = 20;
 
         Sort sortBy = Sort.by("countOfLikes").descending();
+
+        if (sort.equals("createdAt")) {
+            sortBy = Sort.by("createdAt").descending();
+        }
 
         Pageable pageable = PageRequest.of(page - 1, size, sortBy);
 
