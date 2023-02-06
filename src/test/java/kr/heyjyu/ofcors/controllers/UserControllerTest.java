@@ -56,9 +56,6 @@ class UserControllerTest {
 
     private String token;
 
-    UserControllerTest() {
-    }
-
     @BeforeEach
     void setup() {
         token = jwtUtil.encode(1L);
