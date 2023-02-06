@@ -26,8 +26,6 @@ public class ScrapController {
     public QuestionScrapResultDto scrap(@RequestAttribute Long userId, @PathVariable Long id, @RequestBody ScrapRequestDto scrapRequestDto) {
         QuestionId questionId = new QuestionId(id);
 
-        System.out.println(scrapRequestDto.isScrapped());
-
         if (scrapRequestDto.isScrapped()) {
             Question question = scrapQuestionService.scrap(userId, questionId);
 

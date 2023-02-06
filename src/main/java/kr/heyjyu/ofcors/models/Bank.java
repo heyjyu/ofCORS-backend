@@ -6,23 +6,19 @@ import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class Quantity {
-    @Column(name = "quantity")
-    private Long value;
+public class Bank {
+    @Column(name = "bank")
+    private String value;
 
-    public Quantity() {
+    public Bank() {
     }
 
-    public Quantity(Long value) {
+    public Bank(String value) {
         this.value = value;
     }
 
-    public Long value() {
+    public String value() {
         return value;
-    }
-
-    public boolean lessThan(Quantity quantity) {
-        return this.value < quantity.value;
     }
 
     @Override
@@ -35,9 +31,9 @@ public class Quantity {
             return false;
         }
 
-        Quantity otherQuantity = (Quantity) other;
+        Bank otherBank = (Bank) other;
 
-        return Objects.equals(value, otherQuantity.value);
+        return Objects.equals(value, otherBank.value);
     }
 
     @Override

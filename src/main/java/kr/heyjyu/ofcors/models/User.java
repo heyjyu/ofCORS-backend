@@ -89,7 +89,7 @@ public class User {
         this.email = email;
         this.about = new About("");
         this.imageUrl = new ImageUrl("https://ui-avatars.com/api/?name=" + displayName);
-        this.name = new Name("");
+        this.name = new Name("홍길동");
     }
 
     public void changePassword(Password password, PasswordEncoder passwordEncoder) {
@@ -200,6 +200,14 @@ public class User {
         return user;
     }
 
+    public static User fake(Points points) {
+        User user = new User(new DisplayName("joo"), new Email("test@example.com"));
+
+        user.points = points;
+
+        return user;
+    }
+
     public void receive(Points points) {
         this.points = this.points.add(points);
     }
@@ -213,5 +221,13 @@ public class User {
 
     public void buyPoints(Points points) {
         this.points = this.points.add(points);
+    }
+
+    public void exchangePoints(Quantity quantity) {
+        if (this.points.value() < quantity.value()) {
+            throw new NotEnoughPoints();
+        }
+
+        this.points = this.points.deduct(new Points(quantity.value()));
     }
 }

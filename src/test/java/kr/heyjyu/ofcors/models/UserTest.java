@@ -142,4 +142,20 @@ class UserTest {
 
         assertThat(user.getPoints()).isEqualTo(initialPoints.add(points));
     }
+
+    @Test
+    void exchangePoints() {
+        User user = User.fake(new Points(500L));
+
+        user.exchangePoints(new Quantity(500L));
+
+        assertThat(user.getPoints()).isEqualTo(new Points(0L));
+    }
+
+    @Test
+    void exchangeWithTooMuchPoints() {
+        User user = User.fake(new Points(500L));
+
+        assertThrows(NotEnoughPoints.class, () -> user.exchangePoints(new Quantity(1000L)));
+    }
 }
