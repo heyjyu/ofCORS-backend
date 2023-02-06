@@ -7,6 +7,7 @@ import jakarta.persistence.criteria.Root;
 import kr.heyjyu.ofcors.models.AuthorId;
 import kr.heyjyu.ofcors.models.Question;
 import kr.heyjyu.ofcors.models.QuestionStatus;
+import kr.heyjyu.ofcors.models.ScrapUserId;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
@@ -59,6 +60,15 @@ public class QuestionSpecification {
             @Override
             public Predicate toPredicate(Root<Question> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 return criteriaBuilder.equal(root.get("authorId"), authorId);
+            }
+        };
+    }
+
+    public static Specification<Question> equalScrapUserId(ScrapUserId scrapUserId) {
+        return new Specification<Question>() {
+            @Override
+            public Predicate toPredicate(Root<Question> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.isMember(scrapUserId, root.get("scrapUserIds"));
             }
         };
     }
