@@ -1,6 +1,7 @@
 package kr.heyjyu.ofcors;
 
 import kr.heyjyu.ofcors.interceptors.AuthenticationInterceptor;
+import kr.heyjyu.ofcors.utils.IamPort;
 import kr.heyjyu.ofcors.utils.JwtUtil;
 import kr.heyjyu.ofcors.utils.KakaoPay;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,13 @@ public class OfcorsApplication {
 	private String secret;
 
 	@Value("${kakaopay.admin-key}")
-	private String adminKey;
+	private String kakaopayAdminKey;
+
+	@Value("${iamport.api-key}")
+	private String iamportApiKey;
+
+	@Value("${iamport.api-secret}")
+	private String iamportApiSecret;
 
 	public static void main(String[] args) {
 		SpringApplication.run(OfcorsApplication.class, args);
@@ -65,6 +72,11 @@ public class OfcorsApplication {
 
 	@Bean
 	public KakaoPay kakaoPay() {
-		return new KakaoPay(adminKey);
+		return new KakaoPay(kakaopayAdminKey);
+	}
+
+	@Bean
+	public IamPort iamPort() {
+		return new IamPort(iamportApiKey, iamportApiSecret);
 	}
 }
