@@ -10,6 +10,7 @@ import kr.heyjyu.ofcors.models.Exchange;
 import kr.heyjyu.ofcors.models.Points;
 import kr.heyjyu.ofcors.models.Quantity;
 import kr.heyjyu.ofcors.models.User;
+import kr.heyjyu.ofcors.models.UserId;
 import kr.heyjyu.ofcors.repositories.ExchangeRepository;
 import kr.heyjyu.ofcors.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -104,5 +105,12 @@ class ExchangeServiceTest {
         Quantity quantity = new Quantity(500L);
 
         assertThrows(InvalidAccount.class, () -> exchangeService.exchange(userId, bank, accountNumber, quantity));
+    }
+
+    @Test
+    void totalAmount() {
+        Exchange exchange = new Exchange(new Quantity(500L), new UserId(1L), new Bank("하나은행"), new AccountNumber("11111111"));
+
+        assertThat(exchange.totalAmount()).isEqualTo(500L * exchange.UNIT_PRICE);
     }
 }

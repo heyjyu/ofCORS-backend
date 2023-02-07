@@ -44,4 +44,8 @@ public class Quantity {
     public int hashCode() {
         return Objects.hash(value);
     }
+
+    public Long totalPrice(Long unitPrice) {
+        return this.value * unitPrice;
+    }
 }

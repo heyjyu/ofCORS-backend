@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Exchange {
+    public static final Long UNIT_PRICE = 60L;
     @Id
     @GeneratedValue
     private Long id;
@@ -32,11 +33,51 @@ public class Exchange {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    public Exchange() {
+    }
+
     public Exchange(Quantity quantity, UserId userId, Bank bank, AccountNumber accountNumber) {
         this.quantity = quantity;
         this.userId = userId;
         this.bank = bank;
         this.accountNumber = accountNumber;
+        this.status = ExchangeStatus.PROCESSING;
+    }
+
+    public Long totalAmount() {
+        return this.quantity.totalPrice(UNIT_PRICE);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
+    public UserId getUserId() {
+        return userId;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public AccountNumber getAccountNumber() {
+        return accountNumber;
+    }
+
+    public ExchangeStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public static Exchange fake() {
