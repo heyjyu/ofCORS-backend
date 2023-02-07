@@ -39,6 +39,8 @@ public class BackdoorController {
         jdbcTemplate.execute("DELETE FROM answer_like_user_ids");
         jdbcTemplate.execute("DELETE FROM answer");
 
+        jdbcTemplate.execute("DELETE FROM exchange");
+
         return "OK";
     }
 

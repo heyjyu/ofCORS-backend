@@ -1,6 +1,8 @@
 package kr.heyjyu.ofcors.controllers;
 
 import kr.heyjyu.ofcors.application.ExchangeService;
+import kr.heyjyu.ofcors.application.GetExchangesService;
+import kr.heyjyu.ofcors.dtos.ExchangeDto;
 import kr.heyjyu.ofcors.models.Exchange;
 import kr.heyjyu.ofcors.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +32,9 @@ class ExchangeControllerTest {
 
     @MockBean
     private ExchangeService exchangeService;
+
+    @MockBean
+    private GetExchangesService getExchangesService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -55,6 +62,19 @@ class ExchangeControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string(
                         containsString("id")
+                ));
+    }
+
+    @Test
+    void list() throws Exception {
+        given(getExchangesService.getExchanges(any()))
+                .willReturn(List.of(ExchangeDto.fake()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/exchanges")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("exchanges")
                 ));
     }
 }
