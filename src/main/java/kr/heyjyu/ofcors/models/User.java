@@ -89,7 +89,7 @@ public class User {
         this.email = email;
         this.about = new About("");
         this.imageUrl = new ImageUrl("https://ui-avatars.com/api/?name=" + displayName);
-        this.name = new Name("홍길동");
+        this.name = new Name("");
     }
 
     public void changePassword(Password password, PasswordEncoder passwordEncoder) {
@@ -229,5 +229,13 @@ public class User {
         }
 
         this.points = this.points.deduct(new Points(quantity.value()));
+    }
+
+    public void changeName(Name name) {
+        this.name = name;
+    }
+
+    public boolean isBankHolder(Name bankHolder) {
+        return bankHolder.equals(this.name);
     }
 }

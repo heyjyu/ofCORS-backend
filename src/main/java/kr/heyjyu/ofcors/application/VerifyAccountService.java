@@ -5,6 +5,7 @@ import kr.heyjyu.ofcors.dtos.AccountVerificationResultDto;
 import kr.heyjyu.ofcors.exceptions.UserNotFound;
 import kr.heyjyu.ofcors.models.AccountNumber;
 import kr.heyjyu.ofcors.models.Bank;
+import kr.heyjyu.ofcors.models.Name;
 import kr.heyjyu.ofcors.models.User;
 import kr.heyjyu.ofcors.repositories.UserRepository;
 import kr.heyjyu.ofcors.utils.IamPort;
@@ -28,9 +29,11 @@ public class VerifyAccountService {
         try {
             String bankHolder = iamPort.getBankHolder(bank.value(), accountNumber.value());
 
-            // TODO: 실명과 예금주 비교하기
-            // user.isBankHolder(bankHolder);
-            return new AccountVerificationResultDto(true);
+            if (user.isBankHolder(new Name(bankHolder))) {
+                return new AccountVerificationResultDto(true);
+            }
+
+            return new AccountVerificationResultDto(false);
         } catch (RuntimeException e) {
             return new AccountVerificationResultDto(false);
         }

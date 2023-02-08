@@ -2,6 +2,7 @@ package kr.heyjyu.ofcors.application;
 
 import kr.heyjyu.ofcors.models.AccountNumber;
 import kr.heyjyu.ofcors.models.Bank;
+import kr.heyjyu.ofcors.models.Name;
 import kr.heyjyu.ofcors.models.User;
 import kr.heyjyu.ofcors.repositories.UserRepository;
 import kr.heyjyu.ofcors.utils.IamPort;
@@ -37,12 +38,15 @@ class VerifyAccountServiceTest {
 
     @Test
     void verify() {
+        User user = User.fake();
+        user.changeName(new Name("홍길동"));
+
         given(userRepository.findById(any()))
-                .willReturn(Optional.of(User.fake()));
+                .willReturn(Optional.of(user));
 
         given(iamPort.getBankHolder(any(), any()))
                 .willReturn("홍길동");
 
-        assertThat(verifyAccountService.verify(1L, new Bank("우리은행"), new AccountNumber("11111111"))).isNotNull();
+        assertThat(verifyAccountService.verify(1L, new Bank("우리은행"), new AccountNumber("11111111")).getValidated()).isTrue();
     }
 }
