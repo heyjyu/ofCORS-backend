@@ -158,4 +158,27 @@ class UserTest {
 
         assertThrows(NotEnoughPoints.class, () -> user.exchangePoints(new Quantity(1000L)));
     }
+
+    @Test
+    void changeName() {
+        User user = User.fake();
+
+        Name name = new Name("홍길동");
+
+        user.changeName(name);
+
+        assertThat(user.getName()).isEqualTo(name);
+    }
+
+    @Test
+    void isBankHolder() {
+        User user = User.fake();
+
+        Name name = new Name("홍길동");
+
+        user.changeName(name);
+
+        assertThat(user.isBankHolder(name)).isTrue();
+        assertThat(user.isBankHolder(new Name("김동동"))).isFalse();
+    }
 }

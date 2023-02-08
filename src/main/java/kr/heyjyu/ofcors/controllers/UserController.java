@@ -1,10 +1,12 @@
 package kr.heyjyu.ofcors.controllers;
 
+import kr.heyjyu.ofcors.application.ChangeNameService;
 import kr.heyjyu.ofcors.application.CountUserService;
 import kr.heyjyu.ofcors.application.CreateUserService;
 import kr.heyjyu.ofcors.application.EditProfileService;
 import kr.heyjyu.ofcors.application.GetUserService;
 import kr.heyjyu.ofcors.application.GetUsersService;
+import kr.heyjyu.ofcors.dtos.NameDto;
 import kr.heyjyu.ofcors.dtos.ProfileDto;
 import kr.heyjyu.ofcors.dtos.UserCountDto;
 import kr.heyjyu.ofcors.dtos.UserCreationDto;
@@ -14,8 +16,10 @@ import kr.heyjyu.ofcors.dtos.UsersDto;
 import kr.heyjyu.ofcors.exceptions.SignUpFailed;
 import kr.heyjyu.ofcors.models.DisplayName;
 import kr.heyjyu.ofcors.models.Email;
+import kr.heyjyu.ofcors.models.Name;
 import kr.heyjyu.ofcors.models.Password;
 import kr.heyjyu.ofcors.models.User;
+import kr.heyjyu.ofcors.models.UserId;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,17 +41,20 @@ public class UserController {
     private CountUserService countUserService;
     private CreateUserService createUserService;
     private EditProfileService editProfileService;
+    private ChangeNameService changeNameService;
 
     public UserController(GetUsersService getUsersService,
                           GetUserService getUserService,
                           CountUserService countUserService,
                           CreateUserService createUserService,
-                          EditProfileService editProfileService) {
+                          EditProfileService editProfileService,
+                          ChangeNameService changeNameService) {
         this.getUsersService = getUsersService;
         this.getUserService = getUserService;
         this.countUserService = countUserService;
         this.createUserService = createUserService;
         this.editProfileService = editProfileService;
+        this.changeNameService = changeNameService;
     }
 
     @GetMapping
@@ -76,6 +83,13 @@ public class UserController {
     public void editProfile(@RequestAttribute Long userId,
                             @RequestBody ProfileDto profileDto) {
         editProfileService.editProfile(userId, profileDto);
+    }
+
+    @PatchMapping("me/name")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changeName(@RequestAttribute Long userId,
+                            @RequestBody NameDto nameDto) {
+        changeNameService.changeName(new UserId(userId), new Name(nameDto.getName()));
     }
 
     @GetMapping("count")

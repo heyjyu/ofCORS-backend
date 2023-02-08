@@ -1,5 +1,6 @@
 package kr.heyjyu.ofcors.controllers;
 
+import kr.heyjyu.ofcors.application.ChangeNameService;
 import kr.heyjyu.ofcors.application.CountUserService;
 import kr.heyjyu.ofcors.application.CreateUserService;
 import kr.heyjyu.ofcors.application.EditProfileService;
@@ -50,6 +51,9 @@ class UserControllerTest {
 
     @MockBean
     private EditProfileService editProfileService;
+
+    @MockBean
+    private ChangeNameService changeNameService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -117,6 +121,17 @@ class UserControllerTest {
                                 "\"about\":\"저는 함수형 프로그래밍을 좋아합니다\"," +
                                 "\"imageUrl\":\"https://image.com\"," +
                                 "\"tags\":[\"Web\"]" +
+                                "}"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void changeName() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/users/me/name")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{" +
+                                "\"name\":\"홍길동\"" +
                                 "}"))
                 .andExpect(status().isNoContent());
     }

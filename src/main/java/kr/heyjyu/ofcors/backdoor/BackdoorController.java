@@ -56,7 +56,7 @@ public class BackdoorController {
                         "  encoded_password, points, created_at, updated_at" +
                         ")" +
                         " VALUES(1, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                "저는 함수형 프로그래밍을 좋아합니다", "joo", "tester@example.com", "https://ui-avatars.com/api/?name=joo&background=0D8ABC&color=fff", "홍길동", passwordEncoder.encode("Abcdef1!"), 900L,
+                "저는 함수형 프로그래밍을 좋아합니다", "joo", "tester@example.com", "https://ui-avatars.com/api/?name=joo&background=0D8ABC&color=fff", "", passwordEncoder.encode("Abcdef1!"), 900L,
                 now, now
         );
 
