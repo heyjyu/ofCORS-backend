@@ -4,6 +4,7 @@ import kr.heyjyu.ofcors.interceptors.AuthenticationInterceptor;
 import kr.heyjyu.ofcors.utils.IamPort;
 import kr.heyjyu.ofcors.utils.JwtUtil;
 import kr.heyjyu.ofcors.utils.KakaoPay;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -42,6 +43,8 @@ public class OfcorsApplication {
 	@Bean
 	public WebMvcConfigurer webMvcConfigurer() {
 		return new WebMvcConfigurer() {
+			@Autowired
+			private HandlerInterceptor backdoorControlInterceptor;
 
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
@@ -51,6 +54,7 @@ public class OfcorsApplication {
 			@Override
 			public void addInterceptors(InterceptorRegistry registry) {
 				registry.addInterceptor(authenticationInterceptor());
+				registry.addInterceptor(backdoorControlInterceptor);
 			}
 		};
 	}
