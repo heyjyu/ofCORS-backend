@@ -27,7 +27,7 @@ public class CreateUserService {
             throw new ExistingEmail(email);
         }
 
-        ImageUrl imageUrl = new ImageUrl("https://ui-avatars.com/api/?name=" + displayName + "&background=0D8ABC&color=fff");
+        ImageUrl imageUrl = new ImageUrl("https://ui-avatars.com/api/?name=" + displayName.value() + "&background=0D8ABC&color=fff");
 
         User user = new User(displayName, email);
         user.changePassword(password, passwordEncoder);
