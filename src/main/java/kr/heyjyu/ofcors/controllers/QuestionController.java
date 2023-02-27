@@ -1,5 +1,6 @@
 package kr.heyjyu.ofcors.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.heyjyu.ofcors.application.AdoptAnswerService;
 import kr.heyjyu.ofcors.application.CreateQuestionService;
 import kr.heyjyu.ofcors.application.DeleteQuestionService;
@@ -67,8 +68,10 @@ public class QuestionController {
     }
 
     @GetMapping("{id}")
-    public QuestionDto detail(@PathVariable Long id) {
-        return getQuestionService.getQuestion(id);
+    public QuestionDto detail(HttpServletRequest request, @PathVariable Long id) {
+        String ip = request.getRemoteAddr();
+
+        return getQuestionService.getQuestion(id, ip);
     }
 
     @PostMapping

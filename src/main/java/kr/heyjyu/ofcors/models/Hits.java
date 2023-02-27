@@ -21,6 +21,10 @@ public class Hits {
         return value;
     }
 
+    public Hits countUp() {
+        return new Hits(this.value + 1);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {

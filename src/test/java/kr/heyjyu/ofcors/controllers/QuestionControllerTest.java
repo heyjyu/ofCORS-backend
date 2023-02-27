@@ -103,7 +103,7 @@ class QuestionControllerTest {
 
     @Test
     void detail() throws Exception {
-        given(getQuestionService.getQuestion(any()))
+        given(getQuestionService.getQuestion(any(), any()))
                 .willReturn(QuestionDto.fake());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/questions/1"))
