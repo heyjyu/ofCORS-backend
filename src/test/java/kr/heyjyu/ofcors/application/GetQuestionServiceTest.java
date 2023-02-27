@@ -29,6 +29,7 @@ class GetQuestionServiceTest {
     @Test
     void getQuestion() {
         Long id = 1L;
+        String ip = "0:0:0:0:0:0:0:1";
 
         given(questionRepository.findById(1L))
                 .willReturn(Optional.of(Question.fake()));
@@ -36,7 +37,7 @@ class GetQuestionServiceTest {
         given(userRepository.findById(any()))
                 .willReturn(Optional.of(User.fake()));
 
-        assertThat(getQuestionService.getQuestion(id))
+        assertThat(getQuestionService.getQuestion(id, ip))
                 .isNotNull();
     }
 }

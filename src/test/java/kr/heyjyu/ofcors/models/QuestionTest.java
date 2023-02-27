@@ -121,4 +121,23 @@ class QuestionTest {
 
         assertThat(question.getScrapUserIds()).doesNotContain(new ScrapUserId(100L));
     }
+
+    @Test
+    void visit() {
+        Question question = Question.fake();
+
+        String ip = "0:0:0:0:0:0:0:1";
+
+        question.visit(ip);
+
+        assertThat(question.getHits()).isEqualTo(new Hits(1L));
+
+        question.visit(ip);
+
+        assertThat(question.getHits()).isEqualTo(new Hits(1L));
+
+        question.visit("0:0:0:0:0:0:0:2");
+
+        assertThat(question.getHits()).isEqualTo(new Hits(2L));
+    }
 }

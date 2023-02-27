@@ -15,9 +15,7 @@ import kr.heyjyu.ofcors.repositories.QuestionRepository;
 import kr.heyjyu.ofcors.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,9 +29,11 @@ public class GetQuestionService {
         this.userRepository = userRepository;
     }
 
-    public QuestionDto getQuestion(Long id) {
+    public QuestionDto getQuestion(Long id, String ip) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFound());
+
+        question.visit(ip);
 
         User author = userRepository.findById(question.getAuthorId().value())
                 .orElseThrow(() -> new UserNotFound(question.getAuthorId().value()));

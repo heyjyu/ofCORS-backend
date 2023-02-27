@@ -20,7 +20,10 @@ import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,6 +53,9 @@ public class Question {
 
     @ElementCollection
     private Set<LikeUserId> likeUserIds = new HashSet<>();
+
+    @ElementCollection
+    private Map<String, Long> visitedIps = new HashMap<>();
 
     @Formula("(SELECT COUNT(*) FROM question_like_user_ids l WHERE l.question_id = id)")
     private int countOfLikes;
@@ -210,5 +216,15 @@ public class Question {
         Points points = new Points(30L);
 
         return new Question(authorId, title, body, tags, points);
+    }
+
+    public void visit(String ip) {
+        long previousVisitedTime = this.visitedIps.getOrDefault(ip, 0L);
+        long now = System.currentTimeMillis();
+
+        if (now - previousVisitedTime > 3600000L * 24L) {
+            this.hits = this.hits.countUp();
+            this.visitedIps.put(ip, now);
+        }
     }
 }
