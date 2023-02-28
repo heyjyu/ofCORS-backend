@@ -24,8 +24,11 @@ public class KakaoPay {
 
     private String adminKey;
 
-    public KakaoPay(String adminKey) {
+    private String kakaoPayRedirectBaseUrl;
+
+    public KakaoPay(String adminKey, String kakaoPayRedirectBaseUrl) {
         this.adminKey = adminKey;
+        this.kakaoPayRedirectBaseUrl = kakaoPayRedirectBaseUrl;
     }
 
     public String kakaoPayReady(String orderId,
@@ -50,10 +53,9 @@ public class KakaoPay {
         params.add("quantity", String.valueOf(quantity));
         params.add("total_amount", String.valueOf(totalAmount));
         params.add("tax_free_amount", "0");
-        // TODO: 배포 후 url 수정
-        params.add("approval_url", "http://localhost:8080/charge/success");
-        params.add("cancel_url", "http://localhost:8080/charge/cancel");
-        params.add("fail_url", "http://localhost:8080/charge/fail");
+        params.add("approval_url", kakaoPayRedirectBaseUrl + "/charge/success");
+        params.add("cancel_url", kakaoPayRedirectBaseUrl + "/charge/cancel");
+        params.add("fail_url", kakaoPayRedirectBaseUrl + "/charge/fail");
 
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<>(params, headers);
 

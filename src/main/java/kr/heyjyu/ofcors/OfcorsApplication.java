@@ -31,6 +31,9 @@ public class OfcorsApplication {
 	@Value("${iamport.api-secret}")
 	private String iamportApiSecret;
 
+	@Value("${kakaopay.redirect-base-url}")
+	private String kakaoPayRedirectBaseUrl;
+
 	public static void main(String[] args) {
 		SpringApplication.run(OfcorsApplication.class, args);
 	}
@@ -76,7 +79,7 @@ public class OfcorsApplication {
 
 	@Bean
 	public KakaoPay kakaoPay() {
-		return new KakaoPay(kakaopayAdminKey);
+		return new KakaoPay(kakaopayAdminKey, kakaoPayRedirectBaseUrl);
 	}
 
 	@Bean
