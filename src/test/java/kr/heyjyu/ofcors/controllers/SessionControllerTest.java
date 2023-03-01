@@ -1,6 +1,7 @@
 package kr.heyjyu.ofcors.controllers;
 
 import kr.heyjyu.ofcors.application.LoginService;
+import kr.heyjyu.ofcors.application.TrialLoginService;
 import kr.heyjyu.ofcors.exceptions.LoginFailed;
 import kr.heyjyu.ofcors.models.User;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ class SessionControllerTest {
 
     @MockBean
     private LoginService loginService;
+
+    @MockBean
+    private TrialLoginService trialLoginService;
 
     @Test
     void loginSuccess() throws Exception {
@@ -56,5 +60,17 @@ class SessionControllerTest {
                                 "\"password\":\"Abcdef1!\"" +
                                 "}"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void trialLogin() throws Exception {
+        given(trialLoginService.login())
+                .willReturn(User.fake());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/session/trial"))
+                .andExpect(status().isCreated())
+                .andExpect(content().string(
+                        containsString("accessToken")
+                ));
     }
 }

@@ -1,6 +1,7 @@
 package kr.heyjyu.ofcors.controllers;
 
 import kr.heyjyu.ofcors.application.LoginService;
+import kr.heyjyu.ofcors.application.TrialLoginService;
 import kr.heyjyu.ofcors.dtos.LoginRequestDto;
 import kr.heyjyu.ofcors.dtos.LoginResultDto;
 import kr.heyjyu.ofcors.exceptions.LoginFailed;
@@ -20,10 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("session")
 public class SessionController {
     private LoginService loginService;
+    private TrialLoginService trialLoginService;
     private JwtUtil jwtUtil;
 
-    public SessionController(LoginService loginService, JwtUtil jwtUtil) {
+    public SessionController(LoginService loginService, TrialLoginService trialLoginService, JwtUtil jwtUtil) {
         this.loginService = loginService;
+        this.trialLoginService = trialLoginService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -31,6 +34,16 @@ public class SessionController {
     @ResponseStatus(HttpStatus.CREATED)
     public LoginResultDto login(@RequestBody LoginRequestDto loginRequestDto) {
         User user = loginService.login(new Email(loginRequestDto.getEmail()), new Password(loginRequestDto.getPassword()));
+
+        String accessToken = jwtUtil.encode(user.getId());
+
+        return new LoginResultDto(accessToken);
+    }
+
+    @PostMapping("trial")
+    @ResponseStatus(HttpStatus.CREATED)
+    public LoginResultDto trialLogin() {
+        User user = trialLoginService.login();
 
         String accessToken = jwtUtil.encode(user.getId());
 
