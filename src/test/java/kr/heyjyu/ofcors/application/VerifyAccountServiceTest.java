@@ -39,13 +39,14 @@ class VerifyAccountServiceTest {
     @Test
     void verify() {
         User user = User.fake();
-        user.changeName(new Name("홍길동"));
+        // TODO: 실명 인증 기능 추가 후 다시 복구하기
+//        user.changeName(new Name("홍길동"));
 
         given(userRepository.findById(any()))
                 .willReturn(Optional.of(user));
 
-        given(iamPort.getBankHolder(any(), any()))
-                .willReturn("홍길동");
+//        given(iamPort.getBankHolder(any(), any()))
+//                .willReturn("홍길동");
 
         assertThat(verifyAccountService.verify(1L, new Bank("우리은행"), new AccountNumber("11111111")).getValidated()).isTrue();
     }
