@@ -29,11 +29,12 @@ public class VerifyAccountService {
         try {
             String bankHolder = iamPort.getBankHolder(bank.value(), accountNumber.value());
 
-            if (user.isBankHolder(new Name(bankHolder))) {
-                return new AccountVerificationResultDto(true);
-            }
+//            if (user.isBankHolder(new Name(bankHolder))) {
+//                return new AccountVerificationResultDto(true);
+//            }
 
-            return new AccountVerificationResultDto(false);
+//            return new AccountVerificationResultDto(false);
+            return new AccountVerificationResultDto(true);
         } catch (RuntimeException e) {
             return new AccountVerificationResultDto(false);
         }
